@@ -455,7 +455,84 @@ async function obterProdutos() {
             const down  = toHtml("div","estoqDown")
 
             const newValueEstoq = toHtml("div","estoqNewValue")
-            
+            const pedidoButton = document.createElement("div")
+            pedidoButton.textContent= "solicitação"
+            pedidoButton.className = "pedir"
+            pedidoButton.onclick = ()=>{
+                
+                
+                const popup_pedido = document.createElement("div");
+                popup_pedido.className = "popup-pedido";
+
+                const topbar_titulo = document.createElement("div");
+                topbar_titulo.className = "tb-titulo";
+
+                const topbar_pedido = document.createElement("div");
+                topbar_pedido.className = "tb-pedido";
+
+                const topbarPreview = toHtml("div","topbarPreview")
+                topbarPreview.style.backgroundImage = `url(${data.foto})`
+
+                const conteudo_pedido = document.createElement("div");
+                conteudo_pedido.className = "conteudo-popup-pedido";
+
+                const variacPedido = toHtml("div","cont_pedido")
+                variacPedido.textContent = `${data.sku} - [COR: ${variac.cor}]`
+
+                const quantidade_pedido = document.createElement("input");
+                quantidade_pedido.className = "qtd-pedido";
+                quantidade_pedido.placeholder = "Quantidade"
+
+                const controls_pedido = document.createElement("div");
+                controls_pedido.className = "controles";
+
+                const button_pedido = document.createElement("div");
+                button_pedido.className = "btn-pedido";
+
+                const cancelar_pedido = document.createElement("div");
+                cancelar_pedido.className = "cancelar";
+                cancelar_pedido.onclick = ()=>{
+                    popup_pedido.remove()
+                }
+                button_pedido.onclick = () =>{
+                    const pedido = {
+                        variacoes:[
+                            {
+                                sku:doc.id,
+                                cor:variac.cor,
+                                quantidade:quantidade_pedido
+                            }
+                        ]
+                        
+                    }
+                    if (quantidade_pedido.value!=""&&quantidade_pedido.value!=NaN) {
+                        pedido.pendente = quantidade_pedido.value
+                        setPedidos(pedido,doc.id)
+                    }
+                    else{
+                        //error
+                    }
+                }
+                topbar_titulo.textContent = "Pedido de disponibilidade" 
+                button_pedido.textContent = "Confirmar"
+                cancelar_pedido.textContent = "cancelar"
+                quantidade_pedido.type = "number"
+                controls_pedido.appendChild(button_pedido)
+                controls_pedido.appendChild(cancelar_pedido)
+
+                topbar_pedido.appendChild(topbarPreview)
+                topbar_pedido.appendChild(topbar_titulo)
+
+                conteudo_pedido.appendChild(variacPedido)
+                conteudo_pedido.appendChild(quantidade_pedido)
+                conteudo_pedido.appendChild(controls_pedido)
+
+                popup_pedido.appendChild(topbar_pedido)
+                popup_pedido.appendChild(conteudo_pedido)
+                document.body.appendChild(popup_pedido)
+                
+            }
+
             up.innerHTML = `<ion-icon name="add-circle-outline"></ion-icon>`
             down.innerHTML = `<ion-icon name="remove-circle-outline"></ion-icon>            `
             up.onclick = ()=>{
@@ -507,6 +584,7 @@ async function obterProdutos() {
 
             variacDiv.appendChild(previewVriac)
             variacDiv.appendChild(skuVariac)
+            variacDiv.appendChild(pedidoButton)
             variacDiv.appendChild(estoqueVariac)
             variacDiv.appendChild(controlsVariac)
             variacsDiv.appendChild(variacDiv)
@@ -536,63 +614,7 @@ async function obterProdutos() {
             });
         }
         
-        const pedidoButton = document.createElement("div")
-        pedidoButton.textContent= "pedir"
-        pedidoButton.className = "pedir"
-        pedidoButton.onclick = ()=>{
-            const popup_pedido = document.createElement("div");
-            popup_pedido.className = "popup-pedido";
-
-            const topbar_titulo = document.createElement("div");
-            topbar_titulo.className = "tb-titulo";
-
-            const topbar_pedido = document.createElement("div");
-            topbar_pedido.className = "tb-pedido";
-
-            const conteudo_pedido = document.createElement("div");
-            conteudo_pedido.className = "conteudo-popup-pedido";
-
-            const quantidade_pedido = document.createElement("input");
-            quantidade_pedido.className = "qtd-pedido";
-
-            const controls_pedido = document.createElement("div");
-            controls_pedido.className = "controles";
-
-            const button_pedido = document.createElement("div");
-            button_pedido.className = "btn-pedido";
-
-            const cancelar_pedido = document.createElement("div");
-            cancelar_pedido.className = "cancelar";
-            cancelar_pedido.onclick = ()=>{
-                popup_pedido.remove()
-            }
-            button_pedido.onclick = () =>{
-                const pedido = data
-                if (quantidade_pedido.value!=""&&quantidade_pedido.value!=NaN) {
-                    pedido.pendente = quantidade_pedido.value
-                    setPedidos(pedido,doc.id)
-                }
-                else{
-                    //error
-                }
-            }
-            topbar_titulo.textContent = "Pedido de disponibilidade" 
-            button_pedido.textContent = "Confirmar"
-            cancelar_pedido.textContent = "cancelar"
-            quantidade_pedido.type = "number"
-            controls_pedido.appendChild(button_pedido)
-            controls_pedido.appendChild(cancelar_pedido)
-
-            topbar_pedido.appendChild(topbar_titulo)
-
-            conteudo_pedido.appendChild(quantidade_pedido)
-            conteudo_pedido.appendChild(controls_pedido)
-
-            popup_pedido.appendChild(topbar_pedido)
-            popup_pedido.appendChild(conteudo_pedido)
-            document.body.appendChild(popup_pedido)
-            
-        }
+        
 
         const controls = document.createElement("div")
 
@@ -617,7 +639,6 @@ async function obterProdutos() {
 
         RootItem.appendChild(estDiv)
         RootItem.appendChild(variacsDiv)
-
         estoques.appendChild(RootItem)
         
       });

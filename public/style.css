@@ -185,12 +185,11 @@ body{
 .pedir{
     background-color: var(--cor-secundario);
     color: var(--cor-claro);
-    padding: 15px;
-    margin-left: 5px;
+    padding: 2px 5px;
+    margin-right: 5px;
     cursor: pointer;
-
-    box-shadow:  2px 2px 3px #7e7fb32d,
-             -5px -5px 16px #ffffff00;
+    box-shadow: 2px 2px 3px #7e7fb32d,
+              -5px -5px 16px #ffffff00;
 }
 /* popup pedido */
 .popup-pedido {
@@ -206,7 +205,7 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
+    backdrop-filter: blur(20px);
 }
 
 .tb-titulo {
@@ -218,8 +217,22 @@ body{
 .tb-pedido {
     color: var(--cor-claro);
     padding: 10px;
+    display: flex;
+    align-items: center;
+}
+.topbarPreview{
+    background-size: contain;
+    background-position: center;
+    width: 40px;
+    height: 40px;
 }
 
+.cont_pedido{
+    font-size: 12px ;
+    font-weight: 900;
+    margin: 3px;
+    text-transform: uppercase;
+}
 .conteudo-popup-pedido{
     padding: 10px;
 }
