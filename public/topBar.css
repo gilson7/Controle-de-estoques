@@ -1,0 +1,100 @@
+:root {
+    --cor-positivo: #5dfdcb;
+    --cor-escuro: #212529;
+    --cor-negativo: #fd5252;
+    --cor-claro: rgb(255, 255, 255);
+    --cor-secundario: #6f7f91;
+    --cor-azul:  rgb(91, 161, 214);
+
+    --cor-positivo-dec: 92, 252, 202;
+    --cor-escuro-dec: 8, 9, 10;
+    --cor-negativo-dec: 253, 82, 82;
+    --cor-claro-dec: 255, 255, 255;
+    --cor-secundario-dec: 135, 137, 192;
+    --cor-azul-dec: 0, 145, 255;
+
+    /* variaveis banqs */
+    --preto:url('./foto/preto.png');
+    --branco:url('./foto/branco.png');
+    --vermelho:url('./foto/vermelho.png');
+    --amarelo:url('./foto/amarelo.png');
+    --marrom:url('./foto/marrom.png');
+    --jambo:url('./foto/jambo.png');
+    --adega:url('./foto/adega.png');
+    --pub:url('./foto/pub.png');
+    --floral:url('./foto/floral.png');
+  }
+*{
+    font-family: consolas;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    color: rgb(56, 54, 54);
+    transition: cubic-bezier(0.19, 1, 0.22, 1) 200ms;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+
+.background{
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: grayscale(100%) blur(5px);
+    position: fixed;
+    z-index: 0;
+    background-color: rgba(var(--cor-claro-dec),.8);
+}
+nav{
+    width: 100%;
+    background-color: var(--cor-claro);
+    border-bottom:solid 1px rgba(var(--cor-escuro-dec),.1);
+    display: flex;
+    justify-content:left;
+    color: var(--cor-claro);
+    height: 65px;
+    align-items: center;
+    margin-bottom: 5px;
+    border-radius: 0;
+}
+nav a{
+    cursor: pointer;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+nav a label{
+    padding: 5px;
+    width: 100%;
+    display: block;
+    margin: 10px;
+}
+nav img{
+    width: 50px;
+    margin: 10px;
+}
+.active label{
+    color: var(--cor-azul);
+    cursor: pointer;
+
+}
+.navigator{
+    display: flex;
+    justify-content: space-between;
+  
+}
+.no-active label{
+    color: var(--cor-escuro);
+    cursor: pointer;
+}
+#search{
+    text-align: center;
+    background-color: rgba(var(--cor-azul-dec),.1);
+    margin-bottom: 3px;
+    font-size: 17px;
+    padding: 5px;
+    color: var(--cor-escuro);
+    margin-left: 10px;
+}
+#search::placeholder{
+    color: var(--cor-secundario);
+}

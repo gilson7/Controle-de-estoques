@@ -1,0 +1,25 @@
+{
+  "name": "seu-aplicativo-electron",
+  "version": "1.0.0",
+  "description": "Uma breve descrição do seu aplicativo Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seu-usuario/seu-aplicativo-electron.git"
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": "Gilson dos santos",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "electron": "^27.0.4",
+    "electron-builder": "^24.6.4"
+  }
+}

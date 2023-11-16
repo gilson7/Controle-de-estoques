@@ -1,0 +1,21 @@
+{   
+  "appId": "com.estoq.itaqualy",
+  "productName": "Itaqualy Controle De Estoque",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "**/*"
+  ],
+  "asar": true,
+  "nsis": {
+    "oneClick": false,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true
+  },
+  "win": {
+    "target": "nsis",
+    "icon": "./icon.ico"
+  }
+}
+  
