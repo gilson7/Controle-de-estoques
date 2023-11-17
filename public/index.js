@@ -495,17 +495,14 @@ async function obterProdutos() {
                     popup_pedido.remove()
                 }
                 button_pedido.onclick = () =>{
-                    const pedido = {
-                        variacoes:[
-                            {
+                    const pedido = { 
+                                foto:data.foto,
                                 sku:doc.id,
                                 cor:variac.cor,
-                                quantidade:quantidade_pedido
-                            }
-                        ]
-                        
+                                quantidade:quantidade_pedido.value
                     }
                     if (quantidade_pedido.value!=""&&quantidade_pedido.value!=NaN) {
+                        console.log
                         pedido.pendente = quantidade_pedido.value
                         setPedidos(pedido,doc.id)
                     }

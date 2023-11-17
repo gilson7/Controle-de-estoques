@@ -24,7 +24,7 @@ const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
 
-const estoques = document.getElementById("estoques")
+const estoques = document.getElementById("pendentes")
 const produtosColec = collection(db, "produtos_pendentes");
 async function obterProdutos() {
     try {
@@ -35,54 +35,58 @@ async function obterProdutos() {
         const data  =  docu.data()
 
         const estDiv = document.createElement("div");
-        estDiv.classList.add("est");
-        estDiv.id = `div_${(data.titulo).toLowerCase()}`
+        estDiv.classList.add("pendente");
+        estDiv.id = `div_${(data.sku).toLowerCase()}`
 
         const previewDiv = document.createElement("div");
-        previewDiv.classList.add("preview");
+        previewDiv.classList.add("pendente-preview");
         previewDiv.style.backgroundImage=`url(${data.foto})`
 
         const nomeDiv = document.createElement("div");
         nomeDiv.classList.add("nome");
         
-        const tituloDiv = document.createElement("div");
-        tituloDiv.classList.add("titulo");
-        tituloDiv.textContent = data.titulo
         
         const skuDiv = document.createElement("div");
-        skuDiv.classList.add("sku");
+        skuDiv.classList.add("pendente-sku");
         skuDiv.textContent = docu.id
 
         const estoqueDiv = document.createElement("div");
         estoqueDiv.classList.add("estoque");
-        estoqueDiv.textContent = data.pendente
+        estoqueDiv.textContent = "Quantidade: "+data.quantidade
 
         const addEstDiv = document.createElement("div")
-        
+        const up = `<ion-icon name="add-circle-outline"></ion-icon>`
+        const down = `<ion-icon name="remove-circle-outline"></ion-icon>`
+
         const removeEstDiv = document.createElement("div")
-        addEstDiv.classList.add("addEstDiv")
-        addEstDiv.textContent = "+"
-        removeEstDiv.classList.add("removeEstDiv")
-        removeEstDiv.textContent = "-"
+        addEstDiv.classList.add("addPendDiv")
+        addEstDiv.innerHTML = up
+        removeEstDiv.classList.add("removePendDiv")
+        removeEstDiv.innerHTML = down
 
         const saveButton = document.createElement("div")
         saveButton.textContent = "salvar"
-        saveButton.classList.add("save")
+        saveButton.classList.add("pendente-save")
+        saveButton.style.pointerEvents = "none"
+        saveButton.style.opacity = "50%"
         var quanty = 0
         function quantyChange(){
             if(quanty!=0){
                 if(quanty>0){
-                    estoqueDiv.innerHTML = data.pendente + `<span style = "color:green;"> +${quanty}</span>`
-                    saveButton.style.display = "block"
+                    saveButton.style.opacity = "100%"
+                    estoqueDiv.innerHTML = data.quantidade + `<span style = "color:green;"> +${quanty}</span>`
+                    saveButton.style.pointerEvents = "auto"
                 }
                 else{
-                    estoqueDiv.innerHTML = data.pendente + `<span style = "color:red;"> ${quanty}</span>`
-                    saveButton.style.display = "block"
+                    saveButton.style.opacity = "100%"
+                    estoqueDiv.innerHTML = data.quantidade + `<span style = "color:red;"> ${quanty}</span>`
+                    saveButton.style.pointerEvents = "auto"
                 }
             }
             else{
-                estoqueDiv.innerHTML = data.pendente
-                saveButton.style.display = "none"
+                estoqueDiv.innerHTML = "Quantidade: "+data.quantidade
+                saveButton.style.pointerEvents = "none"
+                saveButton.style.opacity = "50%"
             }
         }
         addEstDiv.onclick = ()=>{
@@ -90,18 +94,18 @@ async function obterProdutos() {
             quantyChange()
         }
         removeEstDiv.onclick = ()=>{
-          if(quanty  + parseFloat(data.pendente)>=1){  
+          if(quanty  + parseFloat(data.quantidade)>=1){  
             quanty-=1
             quantyChange()
         }
           }
         saveButton.onclick = ()=>{
             const novosDados = data
-            novosDados.pendente = parseFloat(data.pendente) + quanty
-            if(novosDados.pendente!=0){
+            novosDados.quantidade = parseFloat(data.quantidade) + quanty
+            if(novosDados.quantidade!=0){
               atualizarDocumento(docu.id, novosDados)
               .then(() => {         
-                  estoqueDiv.textContent = parseFloat(data.pendente) + quanty
+                  estoqueDiv.textContent ="Quantidade: "+ parseFloat(data.quantidade) + quanty
                   quanty = 0
                   quantyChange()                
               })
@@ -121,19 +125,24 @@ async function obterProdutos() {
             }
           
         }
+        const controls_parent = document.createElement("div")
+        controls_parent.classList.add("controls_parent")
         const controls = document.createElement("div")
-        controls.classList.add("controls")
+
+
+        controls.classList.add("pendente-controls")
         controls.appendChild(addEstDiv)
-        controls.appendChild(removeEstDiv)              
+        controls.appendChild(removeEstDiv)    
+        controls_parent.appendChild(saveButton)  
+        controls_parent.appendChild(controls)        
         // Estrutura da árvore de elementos
-        nomeDiv.appendChild(tituloDiv);
         nomeDiv.appendChild(skuDiv);
 
         estDiv.appendChild(previewDiv);
         estDiv.appendChild(nomeDiv);
         estDiv.appendChild(estoqueDiv);
-        estDiv.appendChild(saveButton)
-        estDiv.appendChild(controls)
+        
+        estDiv.appendChild(controls_parent)
         estoques.appendChild(estDiv)
       });
     } catch (error) {
