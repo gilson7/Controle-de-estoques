@@ -416,26 +416,6 @@ canvas{
     border: solid 1px rgba(var(--cor-azul-dec),.2);
     margin:  5px auto;
 }
-#erros{
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    bottom: 70px;
-    width: 500px;
-    margin: auto;
-    left: 0;
-    right: 0;
-
-    text-align: center;
-    z-index: 99;
-    pointer-events: none;
-}
-#erros div{
-    transition: cubic-bezier(0.175, 0.885, 0.32, 1.275) 1000ms;
-    margin-top: 10px;
-    padding: 5px 0;
-    backdrop-filter: blur(10px);
-}
 
 
 .variacsDiv{

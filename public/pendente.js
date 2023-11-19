@@ -23,15 +23,26 @@ const db = getFirestore(app);
 
 const analytics = getAnalytics(app);
 
-
+function toHtml(type,classe,conteudo){
+    const element = document.createElement(type)
+    if(!conteudo){
+      return
+    }else if(typeof(conteudo)=='object'){
+      element.appendChild(conteudo)
+    }else if(typeof(conteudo)=='string'){
+      element.textContent = conteudo
+    }
+    element.classList.add(classe)
+    return element
+}
 const estoques = document.getElementById("pendentes")
 const produtosColec = collection(db, "produtos_pendentes");
 async function obterProdutos() {
     try {
       const snapshot = await getDocs(produtosColec);
       snapshot.forEach((docu) => {
-        console.log("ID do documento:", docu.id);
-        console.log("Dados do documento:", docu.data());
+        // console.log("ID do documento:", docu.id);
+        // console.log("Dados do documento:", docu.data());
         const data  =  docu.data()
 
         const estDiv = document.createElement("div");
@@ -45,10 +56,11 @@ async function obterProdutos() {
         const nomeDiv = document.createElement("div");
         nomeDiv.classList.add("nome");
         
+        const corDiv = toHtml("div","cor",data.cor)
         
         const skuDiv = document.createElement("div");
         skuDiv.classList.add("pendente-sku");
-        skuDiv.textContent = docu.id
+        skuDiv.textContent = data.sku
 
         const estoqueDiv = document.createElement("div");
         estoqueDiv.classList.add("estoque");
@@ -69,6 +81,19 @@ async function obterProdutos() {
         saveButton.classList.add("pendente-save")
         saveButton.style.pointerEvents = "none"
         saveButton.style.opacity = "50%"
+        const removeButton = toHtml("div","removeButton","Finalizar")
+        removeButton.onclick= async ()=>{
+          try{
+            await deletarDocumento(docu.id)
+            aviso("Pedido Finalizado Com sucesso",true)
+            estDiv.remove()
+          }
+          catch(erro){
+            aviso("Erro ao finalizar pedido",false)
+            console.log(erro)
+          }
+
+        }
         var quanty = 0
         function quantyChange(){
             if(quanty!=0){
@@ -94,10 +119,10 @@ async function obterProdutos() {
             quantyChange()
         }
         removeEstDiv.onclick = ()=>{
-          if(quanty  + parseFloat(data.quantidade)>=1){  
-            quanty-=1
-            quantyChange()
-        }
+            if(quanty  + parseFloat(data.quantidade)>=1){  
+              quanty-=1
+              quantyChange()
+            }
           }
         saveButton.onclick = ()=>{
             const novosDados = data
@@ -128,21 +153,23 @@ async function obterProdutos() {
         const controls_parent = document.createElement("div")
         controls_parent.classList.add("controls_parent")
         const controls = document.createElement("div")
-
-
         controls.classList.add("pendente-controls")
+
         controls.appendChild(addEstDiv)
         controls.appendChild(removeEstDiv)    
+
         controls_parent.appendChild(saveButton)  
         controls_parent.appendChild(controls)        
         // Estrutura da árvore de elementos
         nomeDiv.appendChild(skuDiv);
+        nomeDiv.appendChild(corDiv)
 
         estDiv.appendChild(previewDiv);
         estDiv.appendChild(nomeDiv);
         estDiv.appendChild(estoqueDiv);
-        
         estDiv.appendChild(controls_parent)
+        estDiv.appendChild(removeButton)  
+
         estoques.appendChild(estDiv)
       });
     } catch (error) {
@@ -152,13 +179,23 @@ async function obterProdutos() {
 obterProdutos() 
 // Função para atualizar um documento
 async function  atualizarDocumento(id, novosDados) {
-    const produtosColec = "produtos_pendentes"; // Substitua pelo nome da coleção
+  const produtosColec = "produtos_pendentes"; // Substitua pelo nome da coleção
+// Crie uma referência ao documento que você deseja atualizar
+  const produtoRef = doc(collection(db, produtosColec), id);
+
+// Use o método updateDoc para atualizar os dados do documento
+  return  await updateDoc(produtoRef, novosDados)
+}
+
+async function  deletarDocumento(id) {
+  const produtosColec = "produtos_pendentes"; // Substitua pelo nome da coleção
   // Crie uma referência ao documento que você deseja atualizar
-    const produtoRef = doc(collection(db, produtosColec), id);
+  const produtoRef = doc(collection(db, produtosColec), id);
 
   // Use o método updateDoc para atualizar os dados do documento
-    return  await updateDoc(produtoRef, novosDados)
+  return  deleteDoc(produtoRef);
 }
+
 const searchBar = document.getElementById("search")
 searchBar.oninput = ()=>{
     var elementos = []
@@ -195,5 +232,22 @@ function encontrarDivsComPalavra(palavra) {
 }
   
   
-  
-
+function aviso(text,status){
+  const avs = document.createElement("div")
+  avs.classList.add("aviso")
+  avs.textContent = text
+  if(status){
+      avs.style.backgroundColor = "rgba(var(--cor-positivo-dec),.3)"
+      avs.style.color = "var(--cor-positivo)"
+  }else{
+      avs.style.backgroundColor = "rgba(var(--cor-negativo-dec),.3)"
+      avs.style.color = "var(--cor-negativo)"
+  }
+  document.getElementById("erros").appendChild(avs)
+  setTimeout(()=>{
+      avs.style.filter = "opacity(50%)"
+  },3000)
+  setTimeout(()=>{
+      avs.remove()
+  },3500)
+}

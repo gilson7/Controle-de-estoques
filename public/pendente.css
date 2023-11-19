@@ -8,8 +8,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-
-
+    align-content: flex-start;
 }
 .pendente{
     display: flex;
@@ -49,21 +48,37 @@
 .pendente-save{
     color: var(--cor-claro);
     background-color: var(--cor-azul);
-    padding: 3px 7px;
-    margin-right: 5px;
+    padding: 3px 13px;
+    margin: 5px;
     text-transform: capitalize;
+    cursor: pointer;
+}
+.removeButton{
+    width:calc(100% - 34px);
+    background-color: var(--cor-escuro);
+    padding: 3px 13px;
+    margin-bottom: 5px;
+    text-transform: capitalize;
+    cursor: pointer;
+
+    color: var(--cor-positivo);
+}
+.removeButton:hover{
+    color: var(--cor-negativo);
+    outline: solid 1px ;
 }
 .controls_parent{
     display: flex;
-    width: 100%;
+    width:calc( 100% - 12px);
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     margin: 5px;
     user-select: none;
 }
 
 .pendente-controls{
     display: flex;
+    align-items: flex-end;
 }
 .pendente-controls div{
    
@@ -76,7 +91,7 @@
     font-weight: 900px;
     display: flex;
     padding: 3px;
-    background:linear-gradient(120deg,rgba(var(--cor-secundario-dec),.2),rgba(var(--cor-azul-dec),.1));
+    background-color: var(--cor-escuro);
 }
 .pendente-controls div:active{
     transform: scale(.9);

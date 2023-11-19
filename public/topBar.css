@@ -1,17 +1,17 @@
 :root {
-    --cor-positivo: #5dfdcb;
-    --cor-escuro: #212529;
-    --cor-negativo: #fd5252;
+    --cor-positivo: rgb(92, 252, 202);
+    --cor-escuro: rgb(33, 37, 41) ;
+    --cor-negativo: rgb(252, 84, 84);
     --cor-claro: rgb(255, 255, 255);
-    --cor-secundario: #6f7f91;
+    --cor-secundario: rgb(160, 178, 201);
     --cor-azul:  rgb(91, 161, 214);
 
     --cor-positivo-dec: 92, 252, 202;
-    --cor-escuro-dec: 8, 9, 10;
-    --cor-negativo-dec: 253, 82, 82;
+    --cor-escuro-dec: 33, 37, 41;
+    --cor-negativo-dec: 252, 84, 84;
     --cor-claro-dec: 255, 255, 255;
-    --cor-secundario-dec: 135, 137, 192;
-    --cor-azul-dec: 0, 145, 255;
+    --cor-secundario-dec: 160, 178, 201;
+    --cor-azul-dec:91, 161, 214;
 
     /* variaveis banqs */
     --preto:url('./foto/preto.png');
@@ -29,7 +29,7 @@
     border-radius: 5px;
     border: none;
     outline: none;
-    color: rgb(56, 54, 54);
+    color: var(--cor-escuro);
     transition: cubic-bezier(0.19, 1, 0.22, 1) 200ms;
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
@@ -97,4 +97,72 @@ nav img{
 }
 #search::placeholder{
     color: var(--cor-secundario);
+}
+#userConfig{
+    display: block;
+    width: 40px;
+    height: 40px; 
+    background-size: contain;
+    margin-left: auto;
+    margin-right: 10px;
+    cursor: pointer;
+    min-width: 40px;
+}
+.name-user-config{
+    margin-top: 4px;
+    font-weight: 600;
+}
+.email-user-config{
+    opacity: .5;
+}
+.preview-user-config{
+    width: 40px;
+    height: 40px; 
+    background-size: contain;
+
+}
+.sair-user-config{
+    background-color: var(--cor-escuro);
+    margin-top: 5px;
+    color: var(--cor-claro);
+    padding: 5px 10px;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+.popup-user-config{
+    padding: 10px 20px;
+    text-align: center;
+    position: fixed;
+    top: 10px;
+    right: 10px;    
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    background-color: rgba(var(--cor-claro-dec),3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border:solid 1px rgba(var(--cor-escuro-dec),.1);
+    color: var(--cor-escuro);
+}
+#erros{
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 70px;
+    width: 500px;
+    margin: auto;
+    left: 0;
+    right: 0;
+
+    text-align: center;
+    z-index: 99;
+    pointer-events: none;
+}
+#erros div{
+    transition: cubic-bezier(0.175, 0.885, 0.32, 1.275) 1000ms;
+    margin-top: 10px;
+    padding: 5px 0;
+    backdrop-filter: blur(10px);
 }

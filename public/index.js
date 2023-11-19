@@ -504,7 +504,7 @@ async function obterProdutos() {
                     if (quantidade_pedido.value!=""&&quantidade_pedido.value!=NaN) {
                         console.log
                         pedido.pendente = quantidade_pedido.value
-                        setPedidos(pedido,doc.id)
+                        setPedidos(pedido,doc.id,popup_pedido)
                     }
                     else{
                         //error
@@ -652,7 +652,6 @@ function setProduto(obj,id){
 
     console.log("Documento definido com sucesso!");
     aviso("Concluido produto definido com sucesso!",true)
-
     window.location.reload();
     })
     .catch((error) => {
@@ -661,15 +660,17 @@ function setProduto(obj,id){
 }
 
 
-function setPedidos(obj,id){
-    const produtoRef = doc(collection(db, "produtos_pendentes"), id);
+function setPedidos(obj,id,popup){
+    const produtoRef = doc(collection(db, "produtos_pendentes"), id+ " "+( obj.cor).toUpperCase());
     setDoc(produtoRef, obj)
     .then(() => {
     console.log("Documento definido com sucesso!");
-    window.location.reload();
+        aviso("Pedido realizado com sucesso",true)
+        popup.remove()
     })
     .catch((error) => {
-    console.error("Erro ao definir o documento: ", error);
+        console.error("Erro ao definir o documento: ", error);
+        aviso("Falha ao relizar pedido ,visite o console para mais informações",false)
     });
 }
 
