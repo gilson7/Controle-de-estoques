@@ -18,6 +18,7 @@
     measurementId: "G-TX8X7DRS5E"
  };
 
+
  // Initialize Firebase
  const app = initializeApp(firebaseConfig);
  const db = getFirestore(app);

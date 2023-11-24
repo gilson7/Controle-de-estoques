@@ -60,7 +60,6 @@
     margin-bottom: 5px;
     text-transform: capitalize;
     cursor: pointer;
-
     color: var(--cor-positivo);
 }
 .removeButton:hover{
@@ -112,4 +111,10 @@
 .removePendDiv{
     color: var(--cor-negativo);
    
+}
+.qr{
+    background-color: rgb(226, 226, 226);
+    width: 200px;
+    height: 200px;
+    margin: 3px;
 }

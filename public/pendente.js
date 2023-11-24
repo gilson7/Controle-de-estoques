@@ -23,10 +23,19 @@ const db = getFirestore(app);
 
 const analytics = getAnalytics(app);
 
+function generateRandomCode(){
+  const alfabet="abcdefghijklmnopqrstuvwxyz"
+  const numeroAleatorio = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000; // Gera um número entre 10000 e 99999
+  function indexAlfabet () {
+    return  Math.floor(Math.random() * alfabet.length)
+  }
+  return numeroAleatorio + alfabet[indexAlfabet()]
+}
+
 function toHtml(type,classe,conteudo){
     const element = document.createElement(type)
     if(!conteudo){
-      return
+      element.innerHTML=""
     }else if(typeof(conteudo)=='object'){
       element.appendChild(conteudo)
     }else if(typeof(conteudo)=='string'){
@@ -81,6 +90,88 @@ async function obterProdutos() {
         saveButton.classList.add("pendente-save")
         saveButton.style.pointerEvents = "none"
         saveButton.style.opacity = "50%"
+        const printButton  = toHtml("div","printButton","")
+        printButton.innerHTML='<ion-icon name="print-outline"></ion-icon>'
+
+        printButton.onclick =()=>{
+          const datas = []
+          const divsToPrint = []
+          for (let index = 0; index < parseFloat(data.quantidade); index++) {
+            const dataObject = {
+              id: data.sku,
+              variac:data.cor,
+              code: generateRandomCode()
+
+            };
+            datas.push(dataObject)
+          }
+       
+          datas.map(ele=>{
+            const qrcode = toHtml('img','qr','')
+            const jsonData = JSON.stringify(ele);
+            const qr = new QRious({
+              element: qrcode,
+              value: jsonData,
+              size: 300
+          });
+            console.log(datas)
+            divsToPrint.push(qrcode)
+          })
+
+          const doc = new jsPDF({
+            orientation: 'landscape', // Escolha 'portrait' ou 'landscape' conforme desejado
+            unit: 'mm',
+            format: [100, 50]
+          })
+
+          divsToPrint.forEach((img, index) => {
+            if (index > 0) {
+              doc.addPage();
+            }
+            const texto = datas[index].id +  " - " + (datas[index].variac).toUpperCase()
+
+            const tamanho = 20
+            const maxWidth = 95
+      
+            var larguraTexto = doc.getStringUnitWidth(texto) * tamanho / doc.internal.scaleFactor;
+            if (larguraTexto > maxWidth) {
+              const novaTamanho = (maxWidth * tamanho) / larguraTexto;
+
+              doc.setFontSize(novaTamanho);
+              larguraTexto = doc.getStringUnitWidth(texto) * novaTamanho / doc.internal.scaleFactor;
+
+            } else {
+
+              doc.setFontSize(tamanho);
+
+            }
+            doc.text((maxWidth/2)  - (larguraTexto / 2) + 2, 10, texto);
+            doc.addImage(img, (maxWidth/2) - 10 , 20, 20, 20);
+            
+          
+          });
+         // Configura a impressão automática ao abrir o PDF
+         const pdfBlob = doc.output('blob');
+
+         // Cria um objeto URL para o Blob do PDF
+         const pdfUrl = URL.createObjectURL(pdfBlob);
+         
+         // Cria um iframe escondido
+         const iframe = document.createElement('iframe');
+         iframe.style.display = 'none';
+         document.body.appendChild(iframe);
+         
+         // Quando o iframe terminar de carregar o PDF, executa a impressão
+         iframe.onload = function() {
+           iframe.contentWindow.print();
+         };
+         
+         // Define o PDF como a fonte do iframe
+         iframe.src = pdfUrl;
+        }
+
+
+
         const removeButton = toHtml("div","removeButton","Finalizar")
         removeButton.onclick= async ()=>{
           try{
@@ -169,14 +260,18 @@ async function obterProdutos() {
         estDiv.appendChild(estoqueDiv);
         estDiv.appendChild(controls_parent)
         estDiv.appendChild(removeButton)  
-
+        estDiv.appendChild(printButton)
         estoques.appendChild(estDiv)
       });
     } catch (error) {
       console.error("Erro ao obter documentos da coleção:", error);
     }
   }
-obterProdutos() 
+
+document.addEventListener('DOMContentLoaded', function() {
+  obterProdutos() 
+})
+
 // Função para atualizar um documento
 async function  atualizarDocumento(id, novosDados) {
   const produtosColec = "produtos_pendentes"; // Substitua pelo nome da coleção
@@ -251,3 +346,4 @@ function aviso(text,status){
       avs.remove()
   },3500)
 }
+
