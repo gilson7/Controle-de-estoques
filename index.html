@@ -1,11 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="topBar.css">
+    <title>Controle de estoque</title>
 </head>
 <body>
 
+<div id="root">
+    <nav>
+        <img src="logo.svg" alt="logo.svg"  class="logtipo">
+        <input type="text" name="seach" id="search" placeholder="buscar produtos">
+        <div class="navigator">
+            <a class="active"><label>Estoques</label></a ><a class="no-active" href="pendente.html"><label>Pedidos</label></a> 
+        </div>
+        <div id="userConfig"></div>
+    </nav>
+ 
+  
+    <div id="produtos">
+
+  
+        <div id="estoques">
+        
+        </div>
+    </div>    
+    <div id="add">
+        <ion-icon name="add-circle-outline" class="add-circle-outline"></ion-icon> <span>Cadastrar Produto</span>
+    </div>
+
+    <div id="erros"></div>
+
+</div>
+    <script type="module" src="getLogin.js"></script>
+    <script type="module" src="index.js"></script>
+    <script  type = "module"  src = "https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script> 
+    <script  nomodule  src = "https://unpkg .com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
+
 </html>
