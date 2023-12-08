@@ -185,7 +185,7 @@ addVariac.onclick =()=>{
 }
 
 const arrayExclusao = []
-const coresDisponiveis = ['preto','branco', 'vermelho', 'amarelo','marrom','jambo','adega','pub','floral'];
+const coresDisponiveis = ['preto','branco', 'vermelho', 'amarelo','marrom','jambo','adega','pub','floral','mel','imbuia'];
 
 function adicionarVariacao(){
 

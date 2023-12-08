@@ -23,6 +23,8 @@
     --adega:url('./foto/adega.png');
     --pub:url('./foto/pub.png');
     --floral:url('./foto/floral.png');
+    --mel:url('./foto/mel.png');
+    --imbuia:url('./foto/imbuia.png');
   }
 *{
     font-family: consolas;
@@ -160,9 +162,33 @@ nav img{
     z-index: 99;
     pointer-events: none;
 }
+#menu{
+    display: none;
+}
 #erros div{
     transition: cubic-bezier(0.175, 0.885, 0.32, 1.275) 1000ms;
     margin-top: 10px;
     padding: 5px 0;
     backdrop-filter: blur(10px);
 }
+@media only screen and (max-width: 600px) {
+    /* Adicione seus estilos aqui para telas menores que 600px */
+    #userConfig{
+        display: none;
+    }
+    .navigator{
+        display: none;
+    }
+    #search{
+        margin: auto;
+    }
+    #menu{
+        display: flex;
+        background-color: rgba(var(--cor-claro-dec),.8);
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        backdrop-filter: blur(10px);
+        z-index: 9999;
+    }
+  }

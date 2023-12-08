@@ -91,7 +91,7 @@ async function obterProdutos() {
         saveButton.style.pointerEvents = "none"
         saveButton.style.opacity = "50%"
         const printButton  = toHtml("div","printButton","")
-        printButton.innerHTML='<ion-icon name="print-outline"></ion-icon>'
+        printButton.innerHTML='<ion-icon name="print-outline"></ion-icon> Print SKU'
 
         printButton.onclick =()=>{
           const datas = []
@@ -128,7 +128,7 @@ async function obterProdutos() {
             if (index > 0) {
               doc.addPage();
             }
-            const texto = datas[index].id +  " - " + (datas[index].variac).toUpperCase()
+            const texto = ((datas[index].id )+  " - " + (datas[index].variac)).toUpperCase()
 
             const tamanho = 20
             const maxWidth = 95

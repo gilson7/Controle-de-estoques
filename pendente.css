@@ -118,3 +118,26 @@
     height: 200px;
     margin: 3px;
 }
+
+.printButton{
+    background-color: var(--cor-azul);
+    width: calc(100% - 6px );
+    margin: 3px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 200;
+    font-size: 14px;
+    cursor: pointer;
+    padding:  5px 0;
+    color: var(--cor-claro);
+}
+.printButton:hover{
+    filter: brightness(1.1);
+}
+.printButton .md.hydrated{
+    
+    color: var(--cor-claro);
+    text-align: center;
+}
