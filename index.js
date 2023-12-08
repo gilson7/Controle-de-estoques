@@ -183,7 +183,7 @@ variacsMain.appendChild(addVariac)
 addVariac.onclick =()=>{
     db_object.variacoes.push(adicionarVariacao())
 }
-
+ 
 const arrayExclusao = []
 const coresDisponiveis = ['preto','branco', 'vermelho', 'amarelo','marrom','jambo','adega','pub','floral','mel','imbuia'];
 

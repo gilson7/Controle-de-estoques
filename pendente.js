@@ -326,7 +326,7 @@ function encontrarDivsComPalavra(palavra) {
     return divsCorrespondentes;
 }
   
-  
+   
 function aviso(text,status){
   const avs = document.createElement("div")
   avs.classList.add("aviso")
