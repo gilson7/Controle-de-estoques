@@ -484,6 +484,12 @@ async function obterProdutos() {
                 quantidade_pedido.className = "qtd-pedido";
                 quantidade_pedido.placeholder = "Quantidade"
 
+                const obsPedido =  document.createElement("textarea");
+                obsPedido.className = "obs-pedido";
+                obsPedido.placeholder = "Observação"
+
+
+
                 const controls_pedido = document.createElement("div");
                 controls_pedido.className = "controles";
 
@@ -500,7 +506,8 @@ async function obterProdutos() {
                                 foto:data.foto,
                                 sku:doc.id,
                                 cor:variac.cor,
-                                quantidade:quantidade_pedido.value
+                                quantidade:quantidade_pedido.value,
+                                obs:obsPedido.value
                     }
                     if (quantidade_pedido.value!=""&&quantidade_pedido.value!=NaN) {
                         console.log
@@ -523,6 +530,7 @@ async function obterProdutos() {
 
                 conteudo_pedido.appendChild(variacPedido)
                 conteudo_pedido.appendChild(quantidade_pedido)
+                conteudo_pedido.appendChild(obsPedido)
                 conteudo_pedido.appendChild(controls_pedido)
 
                 popup_pedido.appendChild(topbar_pedido)

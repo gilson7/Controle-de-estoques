@@ -244,7 +244,16 @@ body{
     border-radius: 4px;
     font-size: 20px;
 }
-
+.obs-pedido{
+    width: calc(100% - 12px);
+    padding: 5px;
+    border: 2px solid rgba(var(--cor-escuro-dec), 0.05);
+    border-radius: 4px;
+    font-size: 20px;
+    max-width:  calc(100% - 12px);
+    min-width:  calc(100% - 12px);
+    max-height: 200px;
+}
 .controles {
     margin-top: 10px;
     display: flex;

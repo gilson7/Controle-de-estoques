@@ -1,0 +1,29 @@
+# Sample workflow for building and deploying a Jekyll site to GitHub Pages
+name: Deploy Static Site to GitHub Pages
+
+on:
+  # Executa em push para a branch padrão
+  push:
+    branches: ["main"]
+
+# Define o trabalho
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Build and Deploy to GitHub Pages
+        run: |
+          mkdir public
+          cp -r * public/
+          mv public/index.html public/404.html  # Se quiser tratar todas as páginas como 404
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          force_orphan: true

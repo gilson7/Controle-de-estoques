@@ -92,7 +92,8 @@ async function obterProdutos() {
         saveButton.style.opacity = "50%"
         const printButton  = toHtml("div","printButton","")
         printButton.innerHTML='<ion-icon name="print-outline"></ion-icon> Print SKU'
-
+        const obsDiv = toHtml("div","obsDiv","")
+        obsDiv.textContent = "OBS: "+ data.obs
         printButton.onclick =()=>{
           const datas = []
           const divsToPrint = []
@@ -257,6 +258,7 @@ async function obterProdutos() {
 
         estDiv.appendChild(previewDiv);
         estDiv.appendChild(nomeDiv);
+        data.obs!=""?estDiv.appendChild(obsDiv):""
         estDiv.appendChild(estoqueDiv);
         estDiv.appendChild(controls_parent)
         estDiv.appendChild(removeButton)  
@@ -305,26 +307,7 @@ searchBar.oninput = ()=>{
     }
 }
 // Função para retornar todas as divs com palavras no ID que correspondem à palavra fornecida
-function encontrarDivsComPalavra(palavra) {
-    const elementos = document.querySelectorAll('[id^="div_"]');
 
-    const palavraMinuscula = palavra.toLowerCase(); // Converter a palavra para minúsculas
-  
-    const divsCorrespondentes = [];
-  
-    elementos.forEach((elemento) => {
-      const id = elemento.id.replace("div_", "").toLowerCase(); // Converter o ID para minúsculas
-      const palavrasNoId = id.split(" ");
-  
-      for (const palavraNoId of palavrasNoId) {
-        if (palavraNoId.includes(palavraMinuscula) || palavraMinuscula.includes(palavraNoId)) {
-            divsCorrespondentes.push(elemento);
-          break; // Evitar duplicações
-        }
-      }
-    });
-    return divsCorrespondentes;
-}
   
    
 function aviso(text,status){
