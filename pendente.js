@@ -146,9 +146,14 @@ async function obterProdutos() {
               doc.setFontSize(tamanho);
 
             }
+          
             doc.text((maxWidth/2)  - (larguraTexto / 2) + 2, 10, texto);
-            doc.addImage(img, (maxWidth/2) - 10 , 20, 20, 20);
-            
+
+            doc.addImage(img, (maxWidth/2) - 10 , 17, 20, 20);
+            if(data.obs!=""){
+              doc.setFontSize(8)
+              doc.text(5, 45, "OBS:"+data.obs);
+            }
           
           });
          // Configura a impressão automática ao abrir o PDF

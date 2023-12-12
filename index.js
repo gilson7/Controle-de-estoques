@@ -1,11 +1,31 @@
  // Import the functions you need from the SDKs you need
  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-analytics.js";
- import { getFirestore ,getDocs,collection,doc,setDoc ,updateDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
+ import { getFirestore ,getDocs,collection,doc,setDoc ,updateDoc,getDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-storage.js"
  // TODO: Add SDKs for Firebase products that you want to use
  // https://firebase.google.com/docs/web/setup#available-libraries
+ var category = false
+ const urlParams = new URLSearchParams(window.location.search)
+ const categoryParam = urlParams.get('categoria')
+ if(categoryParam){
+    category=categoryParam
+    document.getElementById("categorias").value= category
+ }else{
+    var category = false
+}
 
+document.getElementById("categorias").onchange = (e)=>{
+    const value = e.target.value
+    changeCategory(value)
+}
+function changeCategory(catergoria){
+    if(catergoria=="todos"){
+        window.location.href="./"
+    }else{
+        window.location.href="./"+"?categoria="+catergoria
+    }
+}
  // Your web app's Firebase configuration
  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
  const firebaseConfig = {
@@ -35,6 +55,27 @@ const db_object = {
 
     ],
 }
+
+
+function isCategory(id){
+const conditions={
+    banquetas:(id.includes("BQT")),
+    mesas:((id.includes("QD BX")||id.includes("QD AL")||id.includes("RD BX")||id.includes("RD AL"))&&!id.includes("BQT")),
+    portoes:(id.includes("68-")||id.includes("78-"))
+}
+   if (!category) {
+        return true
+   }
+  
+   if(conditions[category]){
+    
+        return true
+   }else{
+        return false 
+   }
+}
+
+
 function toHtml(type,classs){
     const ele = document.createElement(type)
     ele.classList.add(classs)
@@ -374,7 +415,9 @@ async function obterProdutos() {
     try {
       const snapshot =  await getDocs(produtosColec);
       snapshot.forEach((doc) => {
-
+        if(!isCategory(doc.id.toUpperCase())){
+            return
+        }
         console.log("ID do documento:", doc.id);
         console.log("Dados do documento:", doc.data());
 
@@ -515,7 +558,7 @@ async function obterProdutos() {
                         setPedidos(pedido,doc.id,popup_pedido)
                     }
                     else{
-                        //error
+                        alert("Escolha uma quantidade")
                     }
                 }
                 topbar_titulo.textContent = "Pedido de disponibilidade" 
@@ -669,18 +712,31 @@ function setProduto(obj,id){
 }
 
 
-function setPedidos(obj,id,popup){
-    const produtoRef = doc(collection(db, "produtos_pendentes"), id+ " "+( obj.cor).toUpperCase());
-    setDoc(produtoRef, obj)
-    .then(() => {
-    console.log("Documento definido com sucesso!");
-        aviso("Pedido realizado com sucesso",true)
-        popup.remove()
-    })
-    .catch((error) => {
-        console.error("Erro ao definir o documento: ", error);
-        aviso("Falha ao relizar pedido ,visite o console para mais informações",false)
-    });
+async function setPedidos(obj, id, popup) {
+    const produtoRef = doc(collection(db, "produtos_pendentes"), (id + " " + (obj.cor)).toUpperCase());
+
+    try {
+        const produtoSnapshot = await getDoc(produtoRef);
+
+        if (produtoSnapshot.exists()) {
+            // O documento existe, então vamos atualizar o estoque
+            const produtoData = produtoSnapshot.data();
+
+            const novoEstoque = (parseInt(produtoData.quantidade )|| 0) + parseInt(obj.quantidade); // Atualizar o estoque conforme necessário
+
+            await updateDoc(produtoRef, { quantidade: novoEstoque }); // Atualizar o estoque no documento existente
+            console.log("Estoque atualizado com sucesso!");
+        } else {
+            // O documento não existe, então vamos criá-lo
+            await setDoc(produtoRef, obj);
+            console.log("Novo documento definido com sucesso!");
+        }
+        aviso("Pedido realizado com sucesso", true);
+        popup.remove();
+    } catch (error) {
+        console.error("Erro ao definir/atualizar o documento: ", error);
+        aviso("Falha ao realizar pedido, visite o console para mais informações", false);
+    }
 }
 
 // Função para atualizar um documento

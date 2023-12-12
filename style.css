@@ -350,6 +350,11 @@ body{
     margin-right: 2px;
 }
 /* <select> styles */
+
+nav select {
+    margin: 5px auto;
+    width: fit-content;
+}
 select {
     /* Reset */
     appearance: none;
@@ -357,7 +362,7 @@ select {
     outline: 0;
     font: inherit;
     /* Personalize */
-    width: 100%;
+
     text-align: center;
     padding: 5px;
     background: var(--arrow-icon) no-repeat right 0.8em center / 1.4em,
@@ -373,17 +378,21 @@ select {
     /* Remove focus outline */
     &:focus {
       outline: none;
+      background-color: rgba(var(--cor-claro-dec), 1);
     }
     /* <option> colors */
     option {
     width: 100%;
       color: inherit;
-   
+        
     }
   }
 .popup span{
     margin-left: 10px;
     margin-top: 10px;
+}
+.popup select{
+    width: 100%;
 }
 .variacao{
     border: solid 1px rgba(var(--cor-azul-dec),.2);
