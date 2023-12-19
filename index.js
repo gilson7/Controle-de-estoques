@@ -82,6 +82,8 @@ function toHtml(type,classs){
     return ele
 }
 
+
+
 function aviso(text,status){
     const avs = document.createElement("div")
     avs.classList.add("aviso")
@@ -742,7 +744,8 @@ function setProduto(obj,id){
 
 
 async function setPedidos(obj, id, popup) {
-    const produtoRef = doc(collection(db, "produtos_pendentes"), (id + " " + (obj.cor)).toUpperCase());
+    
+    const produtoRef = doc(collection(db, "produtos_pendentes"), ((id + " " + (obj.cor) + (obj.pacotes>1?obj.pacotes+"X":""))).toUpperCase());
 
     try {
         const produtoSnapshot = await getDoc(produtoRef);
@@ -791,7 +794,18 @@ searchBar.oninput = ()=>{
     }
 }
 
+async function getRecados(){
+    try {
+        const snapshot =  await getDocs(collection(db,"recados"));
+        snapshot.forEach((doc) => {
+            console.log(doc.data())
+        })
+    }
+    catch{
 
+    }
+}
+//getRecados()
 // Função para retornar todas as divs com palavras no ID que correspondem à palavra fornecida
 function encontrarDivsComPalavra(palavra) {
     const elementos = document.querySelectorAll('[id^="div_"]');

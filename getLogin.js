@@ -40,6 +40,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 var ispp = false
 const elementConfig = document.getElementById("userConfig")
+const elementConfigMobile = document.getElementById("userConfig-mobile")
 onAuthStateChanged(auth, (user) => {
     if (user) {
 
@@ -73,7 +74,7 @@ onAuthStateChanged(auth, (user) => {
                 &&
                     e.target.parentNode.className!="popup-user-config"
                 &&
-                e.target.id!="userConfig"){
+               ( e.target.id!="userConfig"&& e.target.id!="userConfig-mobile")){
                     console.log(e.target.className)
                     popup.remove()
                     ispp = false
@@ -81,6 +82,7 @@ onAuthStateChanged(auth, (user) => {
             }
         }   
         elementConfig.onclick = generatePopup
+        elementConfigMobile.onclick = generatePopup
         console.log(user)
     }else{
         window.location.href = "login.html"

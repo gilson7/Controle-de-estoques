@@ -46,13 +46,25 @@ function toHtml(type,classe,conteudo){
 }
 const estoques = document.getElementById("pendentes")
 const produtosColec = collection(db, "produtos_pendentes");
+const rodape = document.getElementById("rodape")
+const quantidade_pacotes_element = toHtml("div","qtd-pacotes-div","Cauculando")
+var quantidadeDePacotes = 0
+rodape.appendChild(quantidade_pacotes_element)
 async function obterProdutos() {
     try {
       const snapshot = await getDocs(produtosColec);
+
+      if(!snapshot.size){
+        quantidadeDePacotes=0
+        quantidade_pacotes_element.innerHTML = quantidadeDePacotes+" Pacotes"
+        return
+      }
       snapshot.forEach((docu) => {
         // console.log("ID do documento:", docu.id);
         // console.log("Dados do documento:", docu.data());
         const data  =  docu.data()
+        quantidadeDePacotes += parseFloat(data.quantidade)
+        quantidade_pacotes_element.innerHTML = quantidadeDePacotes+" Pacotes"
         const estDiv = document.createElement("div");
         estDiv.classList.add("pendente");
         estDiv.id = `div_${(data.sku).toLowerCase()}`

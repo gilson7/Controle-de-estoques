@@ -29,17 +29,36 @@
 
         <div id="userConfig"></div>
     </nav>
- 
+    <div class="navigator-mobile">
+        <a class="active"><label>Estoques</label></a ><a class="no-active" href="pendente.html"><label>Pedidos</label></a><a id="userConfig-mobile">user</a> 
+    </div>
    
     <div id="produtos">
-
-  
         <div id="estoques">
-        
         </div>
     </div>    
-    <div id="add">
-        <ion-icon name="add-circle-outline" class="add-circle-outline"></ion-icon> <span>Cadastrar Produto</span>
+    <div class="rodape">
+        <div id="msn"><ion-icon name="chatbox-outline"></ion-icon></div>
+        <div id="add">
+            <ion-icon name="add-circle-outline" class="add-circle-outline"></ion-icon> <span>Cadastrar Produto</span>
+        </div>
+        
+    </div>
+
+    <div id="chat">
+        <div class="chatTopbar">
+            <div class="chatTitle">Recados</div>
+            <div class="closeChat" id="closeChat"><ion-icon name="close-outline"></ion-icon></div>
+        </div>
+        <div id="recados" class="recados">
+
+        </div>
+        <div class="bottomChat">
+            <input type="text" name="" id="recado"  class="recado">
+            <div id="enviar">Enviar</div>
+        </div>
+      
+        </textarea>
     </div>
 
     <div id="erros"></div>

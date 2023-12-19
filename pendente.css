@@ -161,3 +161,17 @@
     top: 3px;
     font-weight: 600;
 }
+#rodape{
+    display: flex;
+    position: absolute;
+    border-top: solid 1px rgba(var(--cor-escuro-dec),.1);
+    border-radius: 0;
+    bottom: 0;
+    width: 100vw;
+    align-items: center;
+    justify-content: right;
+}
+#rodape div{
+    margin: 0 5px;
+    user-select: none;
+}
