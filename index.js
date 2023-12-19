@@ -502,6 +502,10 @@ async function obterProdutos() {
             const pedidoButton = document.createElement("div")
             pedidoButton.textContent= "solicitação"
             pedidoButton.className = "pedir"
+
+
+            const values = [1,2,3,4,5,6]
+            var selectedValue = values[0]
             pedidoButton.onclick = ()=>{
                 
                 
@@ -531,6 +535,30 @@ async function obterProdutos() {
                 obsPedido.className = "obs-pedido";
                 obsPedido.placeholder = "Observação"
 
+                const quantidade_pacotes = toHtml("div","qtd-pacote")
+             
+                for (let index = 0; index < values.length; index++) {
+                    const element = values[index];
+                    const opt = toHtml("div","opt")
+                    opt.textContent = element+"x"
+                    quantidade_pacotes.appendChild(opt)
+                    opt.onclick = ()=>{
+                        selectedValue = values[index]
+                        addActive(opt)
+                    }       
+                    if(index==0){
+                        opt.classList.add("active")
+                    }
+                }
+                
+                function  addActive(ele){
+                    const div =document.getElementsByClassName("opt")
+                    for(let id = 0;id < div.length;id++){
+                        const element = div[id]
+                        element.classList.remove("active")
+                    }
+                    ele.classList.add("active")
+                }   
 
 
                 const controls_pedido = document.createElement("div");
@@ -550,7 +578,8 @@ async function obterProdutos() {
                                 sku:doc.id,
                                 cor:variac.cor,
                                 quantidade:quantidade_pedido.value,
-                                obs:obsPedido.value
+                                obs:obsPedido.value,
+                                pacotes:selectedValue
                     }
                     if (quantidade_pedido.value!=""&&quantidade_pedido.value!=NaN) {
                         console.log
@@ -570,7 +599,7 @@ async function obterProdutos() {
 
                 topbar_pedido.appendChild(topbarPreview)
                 topbar_pedido.appendChild(topbar_titulo)
-
+                conteudo_pedido.appendChild(quantidade_pacotes)
                 conteudo_pedido.appendChild(variacPedido)
                 conteudo_pedido.appendChild(quantidade_pedido)
                 conteudo_pedido.appendChild(obsPedido)

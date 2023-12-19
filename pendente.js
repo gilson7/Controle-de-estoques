@@ -53,11 +53,12 @@ async function obterProdutos() {
         // console.log("ID do documento:", docu.id);
         // console.log("Dados do documento:", docu.data());
         const data  =  docu.data()
-
         const estDiv = document.createElement("div");
         estDiv.classList.add("pendente");
         estDiv.id = `div_${(data.sku).toLowerCase()}`
-
+        //elemento da quantidade de pacotes por post
+        const note = toHtml("div","qtd-pacotes",data.pacotes+"X")
+       
         const previewDiv = document.createElement("div");
         previewDiv.classList.add("pendente-preview");
         previewDiv.style.backgroundImage=`url(${data.foto})`
@@ -260,14 +261,20 @@ async function obterProdutos() {
         // Estrutura da árvore de elementos
         nomeDiv.appendChild(skuDiv);
         nomeDiv.appendChild(corDiv)
-
+        if(parseFloat(data.pacotes)>1){
+          estDiv.appendChild(note)
+        }
         estDiv.appendChild(previewDiv);
         estDiv.appendChild(nomeDiv);
         data.obs!=""?estDiv.appendChild(obsDiv):""
+
+       
+  
         estDiv.appendChild(estoqueDiv);
         estDiv.appendChild(controls_parent)
         estDiv.appendChild(removeButton)  
         estDiv.appendChild(printButton)
+        
         estoques.appendChild(estDiv)
       });
     } catch (error) {

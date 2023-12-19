@@ -1,7 +1,7 @@
 #pendentes{
     overflow-y: auto;
     height: calc(100vh - 135px);
-    width: 90%;
+    width: 100%;
     scroll-behavior: smooth;
     display: flex;
     flex-flow: row wrap;
@@ -23,6 +23,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 .pendente-preview{
     height: 120px;
@@ -41,10 +42,13 @@
     min-width: 130px;
     font-size: 15px;
     margin-top: 3px;
+
 }
 .pendente-sku{
     font-size: 12px;
     margin: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 .pendente-save{
     color: var(--cor-claro);
@@ -147,4 +151,13 @@
     
     color: var(--cor-claro);
     text-align: center;
+}
+.qtd-pacotes{
+    position: absolute;
+    width: 20px;
+    background-color: var(--cor-positivo);
+    padding: 3px;
+    right: 3px;
+    top: 3px;
+    font-weight: 600;
 }
