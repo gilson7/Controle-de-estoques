@@ -175,3 +175,9 @@
     margin: 0 5px;
     user-select: none;
 }
+.relatorio{
+    cursor: pointer;
+}
+.relatorio:hover{
+    color: var(--cor-azul);
+}

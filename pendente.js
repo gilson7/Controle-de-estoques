@@ -16,13 +16,10 @@ const firebaseConfig = {
     appId: "1:543584297763:web:8e7b4f09c11fee0828e296",
     measurementId: "G-TX8X7DRS5E"
 };
-
  // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
+const db = getFirestore(app)
 const analytics = getAnalytics(app);
-
 function generateRandomCode(){
   const alfabet="abcdefghijklmnopqrstuvwxyz"
   const numeroAleatorio = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000; // Gera um número entre 10000 e 99999
@@ -31,7 +28,6 @@ function generateRandomCode(){
   }
   return numeroAleatorio + alfabet[indexAlfabet()]
 }
-
 function toHtml(type,classe,conteudo){
     const element = document.createElement(type)
     if(!conteudo){
@@ -44,25 +40,72 @@ function toHtml(type,classe,conteudo){
     element.classList.add(classe)
     return element
 }
+
+
 const estoques = document.getElementById("pendentes")
 const produtosColec = collection(db, "produtos_pendentes");
 const rodape = document.getElementById("rodape")
 const quantidade_pacotes_element = toHtml("div","qtd-pacotes-div","Cauculando")
 var quantidadeDePacotes = 0
+
+const relatorio = toHtml("div","relatorio","Imprimir relatório")
+
+
+
+rodape.appendChild(relatorio)
 rodape.appendChild(quantidade_pacotes_element)
+const docRelatorio = new jsPDF({
+  orientation: 'portrait', // Escolha 'portrait' ou 'landscape' conforme desejado
+  unit: 'mm',
+  format: [210, 297]
+})
+docRelatorio.setFontSize(24)
+docRelatorio.text(70,13,"Relatório de Pedidos")
+docRelatorio.setFontSize(12)
+docRelatorio.text(5,20,`${new Date()}`)
+
+relatorio.onclick = ()=>{
+    const pdfBlob = docRelatorio.output('blob');
+      // Cria um objeto URL para o Blob do PDF
+    const pdfUrl = URL.createObjectURL(pdfBlob);   
+      // Cria um iframe escondido
+    const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+      // Quando o iframe terminar de carregar o PDF, executa a impressão
+    iframe.onload = function() {
+      iframe.contentWindow.print();
+    };
+      // Define o PDF como a fonte do iframe
+    iframe.src = pdfUrl;
+}
+
 async function obterProdutos() {
+  
     try {
       const snapshot = await getDocs(produtosColec);
-
+   
+      
       if(!snapshot.size){
         quantidadeDePacotes=0
         quantidade_pacotes_element.innerHTML = quantidadeDePacotes+" Pacotes"
         return
       }
+      var relatTextSpace = 20
       snapshot.forEach((docu) => {
         // console.log("ID do documento:", docu.id);
         // console.log("Dados do documento:", docu.data());
+       
+
+
         const data  =  docu.data()
+        docRelatorio.setFontSize(14)
+        docRelatorio.text(10,relatTextSpace+=7,docu.id+"____"+data.quantidade)
+        
+       
+
+
+
         quantidadeDePacotes += parseFloat(data.quantidade)
         quantidade_pacotes_element.innerHTML = quantidadeDePacotes+" Pacotes"
         const estDiv = document.createElement("div");
