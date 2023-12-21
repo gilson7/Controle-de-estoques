@@ -848,6 +848,21 @@ searchBar.oninput = ()=>{
 }
 //recados
 const recadosDiv = document.getElementById("recados")
+const sendRecado = document.getElementById("enviar")
+sendRecado.onclick=()=>{
+    const msg = document.getElementById("recado").value
+    if(!msg){
+        aviso("Escreva algo",false)
+    return
+    }
+    setRecados({
+        data:dataFormatada(),
+        hora:horaFormatada(),
+        msg
+    }).then(()=>{
+        document.getElementById("recado").value = ""
+    })
+}
 async function getRecados(){
     recadosDiv.innerHTML=""
     try {
@@ -891,8 +906,24 @@ function deleteRecados(id,element){
     console.error('Erro ao excluir o documento:', error);
   });
 }
-function setRecados(dados){
-    const documentRef = doc(db, 'suaColecao', idDoDocumento);
+async function setRecados(dados){
+    console.log(dados)
+    try{
+        const id = ("_"+dados.data+"_"+dados.hora).replace(":","_").replace(":","_").replace("/","*").replace("/","*")
+        console.log(id)
+        const documentRef = doc(db, 'recados', id);
+        await setDoc(documentRef,dados)
+        aviso("recado enviado com sucesso",true)
+
+        setTimeout(()=>{
+            getRecados()
+        },400)
+    }
+    catch(erro){
+        aviso("erro ao enviar",false)
+        console.log(erro)
+    }
+    
 }
 // Função para retornar todas as divs com palavras no ID que correspondem à palavra fornecida
 function encontrarDivsComPalavra(palavra) {
@@ -934,3 +965,20 @@ function dataURLtoBlob(dataURL) {
   
     return new Blob([u8arr], { type: mime });
 }
+
+function horaFormatada() {
+    const agora = new Date();
+    const hora = agora.getHours().toString().padStart(2, '0'); // Obtém a hora atual e garante dois dígitos
+    const minutos = agora.getMinutes().toString().padStart(2, '0'); // Obtém os minutos atuais e garante dois dígitos
+    const segundos = agora.getSeconds().toString().padStart(2, '0'); // Obtém os segundos atuais e garante dois dígitos
+    return `${hora}:${minutos}:${segundos}`; // Retorna a hora formatada
+  }
+  
+  // Função para retornar data formatada
+  function dataFormatada() {
+    const hoje = new Date();
+    const dia = hoje.getDate().toString().padStart(2, '0'); // Obtém o dia do mês e garante dois dígitos
+    const mes = (hoje.getMonth() + 1).toString().padStart(2, '0'); // Obtém o mês atual e garante dois dígitos
+    const ano = hoje.getFullYear(); // Obtém o ano atual
+    return `${dia}/${mes}/${ano}`; // Retorna a data formatada
+  }

@@ -190,9 +190,7 @@ async function obterProdutos() {
               larguraTexto = doc.getStringUnitWidth(texto) * novaTamanho / doc.internal.scaleFactor;
 
             } else {
-
               doc.setFontSize(tamanho);
-
             }
           
             doc.text((maxWidth/2)  - (larguraTexto / 2) + 2, 10, texto);
@@ -242,34 +240,34 @@ async function obterProdutos() {
         }
         var quanty = 0
         function quantyChange(){
-            if(quanty!=0){
-                if(quanty>0){
-                    saveButton.style.opacity = "100%"
-                    estoqueDiv.innerHTML = data.quantidade + `<span style = "color:green;"> +${quanty}</span>`
-                    saveButton.style.pointerEvents = "auto"
-                }
-                else{
-                    saveButton.style.opacity = "100%"
-                    estoqueDiv.innerHTML = data.quantidade + `<span style = "color:red;"> ${quanty}</span>`
-                    saveButton.style.pointerEvents = "auto"
-                }
-            }
-            else{
-                estoqueDiv.innerHTML = "Quantidade: "+data.quantidade
-                saveButton.style.pointerEvents = "none"
-                saveButton.style.opacity = "50%"
-            }
+          if(quanty!=0){
+              if(quanty>0){
+                  saveButton.style.opacity = "100%"
+                  estoqueDiv.innerHTML = data.quantidade + `<span style = "color:green;"> +${quanty}</span>`
+                  saveButton.style.pointerEvents = "auto"
+              }
+              else{
+                  saveButton.style.opacity = "100%"
+                  estoqueDiv.innerHTML = data.quantidade + `<span style = "color:red;"> ${quanty}</span>`
+                  saveButton.style.pointerEvents = "auto"
+              }
+          }
+          else{
+            estoqueDiv.innerHTML = "Quantidade: "+data.quantidade
+            saveButton.style.pointerEvents = "none"
+            saveButton.style.opacity = "50%"
+          }
         }
         addEstDiv.onclick = ()=>{
-            quanty+=1
-            quantyChange()
+          quanty+=1
+          quantyChange()
         }
         removeEstDiv.onclick = ()=>{
-            if(quanty  + parseFloat(data.quantidade)>=1){  
-              quanty-=1
-              quantyChange()
-            }
+          if(quanty  + parseFloat(data.quantidade)>=1){  
+            quanty-=1
+            quantyChange()
           }
+      }
         saveButton.onclick = ()=>{
             const novosDados = data
             novosDados.quantidade = parseFloat(data.quantidade) + quanty
@@ -294,7 +292,6 @@ async function obterProdutos() {
                   console.error('Erro ao deletar o documento:', error);
                 });
             }
-          
         }
         const controls_parent = document.createElement("div")
         controls_parent.classList.add("controls_parent")
@@ -309,7 +306,6 @@ async function obterProdutos() {
         // Estrutura da árvore de elementos
         nomeDiv.appendChild(skuDiv);
         nomeDiv.appendChild(corDiv)
-     
 
         const  previewMain = toHtml("div","previewMain","")
         for (let i = 1; i < parseFloat(data.pacotes) ; i++) {
@@ -321,8 +317,6 @@ async function obterProdutos() {
 
         estDiv.appendChild(nomeDiv);
         data.obs!=""?estDiv.appendChild(obsDiv):""
-
-       
 
         estDiv.appendChild(lojaElement);
         estDiv.appendChild(estoqueDiv);
