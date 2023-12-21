@@ -40,17 +40,14 @@ function toHtml(type,classe,conteudo){
     element.classList.add(classe)
     return element
 }
-
-
 const estoques = document.getElementById("pendentes")
 const produtosColec = collection(db, "produtos_pendentes");
 const rodape = document.getElementById("rodape")
 const quantidade_pacotes_element = toHtml("div","qtd-pacotes-div","Cauculando")
+
 var quantidadeDePacotes = 0
 
 const relatorio = toHtml("div","relatorio","Imprimir relatório")
-
-
 
 rodape.appendChild(relatorio)
 rodape.appendChild(quantidade_pacotes_element)
@@ -79,13 +76,14 @@ relatorio.onclick = ()=>{
       // Define o PDF como a fonte do iframe
     iframe.src = pdfUrl;
 }
-
+const cores = {
+  Itaqualy:"orange",
+  Qualyshop:"green",
+  Tekshop:"red"
+}
 async function obterProdutos() {
-  
     try {
       const snapshot = await getDocs(produtosColec);
-   
-      
       if(!snapshot.size){
         quantidadeDePacotes=0
         quantidade_pacotes_element.innerHTML = quantidadeDePacotes+" Pacotes"
@@ -95,19 +93,13 @@ async function obterProdutos() {
       snapshot.forEach((docu) => {
         // console.log("ID do documento:", docu.id);
         // console.log("Dados do documento:", docu.data());
-       
-
-
         const data  =  docu.data()
         docRelatorio.setFontSize(14)
         docRelatorio.text(10,relatTextSpace+=7,docu.id+"____"+data.quantidade)
-        
-       
-
-
-
         quantidadeDePacotes += parseFloat(data.quantidade)
         quantidade_pacotes_element.innerHTML = quantidadeDePacotes+" Pacotes"
+        const lojaElement = toHtml("div","loja","")
+        lojaElement.style.backgroundColor = cores[data.loja]
         const estDiv = document.createElement("div");
         estDiv.classList.add("pendente");
         estDiv.id = `div_${(data.sku).toLowerCase()}`
@@ -157,7 +149,7 @@ async function obterProdutos() {
             const dataObject = {
               id: data.sku,
               variac:data.cor,
-              code: generateRandomCode()
+              code: generateRandomCode(),
 
             };
             datas.push(dataObject)
@@ -185,7 +177,7 @@ async function obterProdutos() {
             if (index > 0) {
               doc.addPage();
             }
-            const texto = ((datas[index].id )+  " - " + (datas[index].variac)).toUpperCase()
+            const texto = ((datas[index].id )+  " - " + ((datas[index].variac)+" - "+(data.loja||""))).toUpperCase()
 
             const tamanho = 20
             const maxWidth = 95
@@ -324,7 +316,8 @@ async function obterProdutos() {
         data.obs!=""?estDiv.appendChild(obsDiv):""
 
        
-  
+
+        estDiv.appendChild(lojaElement);
         estDiv.appendChild(estoqueDiv);
         estDiv.appendChild(controls_parent)
         estDiv.appendChild(removeButton)  

@@ -1,7 +1,7 @@
  // Import the functions you need from the SDKs you need
  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-analytics.js";
- import { getFirestore ,getDocs,collection,doc,setDoc ,updateDoc,getDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
+ import { getFirestore ,getDocs,collection,doc,setDoc ,deleteDoc,updateDoc,getDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-storage.js"
  // TODO: Add SDKs for Firebase products that you want to use
  // https://firebase.google.com/docs/web/setup#available-libraries
@@ -25,6 +25,11 @@ function changeCategory(catergoria){
     }else{
         window.location.href="./"+"?categoria="+catergoria
     }
+}
+function inserirNumeroAntesDaPalavra(texto, palavra, numero) {
+    const regex = new RegExp('\\b' + palavra + '\\b', 'i'); // Expressão regular para a palavra completa
+    const novaString = texto.replace(regex, numero + ' ' + palavra); // Substitui a palavra pelo número + palavra
+    return novaString;
 }
  // Your web app's Firebase configuration
  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -81,6 +86,16 @@ function toHtml(type,classs){
     ele.classList.add(classs)
     return ele
 }
+const chat = document.getElementById("chat")
+const buttonChat = document.getElementById("msn")
+const closeChat = document.getElementById("closeChat")
+closeChat.onclick = ()=>{
+    chat.style.display="none"
+}
+buttonChat.onclick = ()=>{
+    chat.style.display="block"
+}
+
 
 
 
@@ -504,8 +519,9 @@ async function obterProdutos() {
             const pedidoButton = document.createElement("div")
             pedidoButton.textContent= "solicitação"
             pedidoButton.className = "pedir"
-
-
+    
+            const lojas=["Qualyshop","Itaqualy","Tekshop"]
+            var selectedLojas = lojas[0]
             const values = [1,2,3,4,5,6]
             var selectedValue = values[0]
             pedidoButton.onclick = ()=>{
@@ -560,8 +576,29 @@ async function obterProdutos() {
                         element.classList.remove("active")
                     }
                     ele.classList.add("active")
+                }
+                const LojasElment = toHtml("div","opts-lojas")
+                lojas.map((item,index)=>{
+                    const loja = toHtml("div","opt-loja")
+                    loja.textContent = item
+                    loja.onclick = ()=>{
+                        ChangeStore(index,loja)
+                    }
+                    LojasElment.appendChild(loja)
+                    if(index==0){
+                        loja.classList.add("active")
+                    }
+                })
+                function ChangeStore(index,ele){
+                    selectedLojas = lojas[index]
+                    const div =document.getElementsByClassName("opt-loja")
+                    for(let id = 0;id < div.length;id++){
+                        const element = div[id]
+                        element.classList.remove("active")
+                    }
+                    ele.classList.add("active")
                 }   
-
+                
 
                 const controls_pedido = document.createElement("div");
                 controls_pedido.className = "controles";
@@ -581,7 +618,22 @@ async function obterProdutos() {
                                 cor:variac.cor,
                                 quantidade:quantidade_pedido.value,
                                 obs:obsPedido.value,
-                                pacotes:selectedValue
+                                pacotes:selectedValue,
+                                loja:selectedLojas
+                    }
+                    if(pedido.pacotes>1){
+                        var sku = pedido.sku
+                        const regex = /\d+/; // Expressão regular para encontrar um ou mais dígitos
+                        const resultado = sku.match(regex); // Procura o padrão na string
+                        if (resultado !== null) {
+                            console.log(resultado[0]); // Retorna o primeiro número encontrado
+                            sku = sku.replace(resultado[0],resultado[0]*pedido.pacotes)
+                            pedido.sku=sku
+                        }
+                        if(sku.toUpperCase().includes("MESA")&&sku.toUpperCase().includes("BQT")){
+                            sku = inserirNumeroAntesDaPalavra(sku, "MESA", pedido.pacotes)
+                            pedido.sku=sku
+                        }
                     }
                     if (quantidade_pedido.value!=""&&quantidade_pedido.value!=NaN) {
                         console.log
@@ -601,6 +653,7 @@ async function obterProdutos() {
 
                 topbar_pedido.appendChild(topbarPreview)
                 topbar_pedido.appendChild(topbar_titulo)
+                conteudo_pedido.appendChild(LojasElment)
                 conteudo_pedido.appendChild(quantidade_pacotes)
                 conteudo_pedido.appendChild(variacPedido)
                 conteudo_pedido.appendChild(quantidade_pedido)
@@ -745,7 +798,7 @@ function setProduto(obj,id){
 
 async function setPedidos(obj, id, popup) {
     
-    const produtoRef = doc(collection(db, "produtos_pendentes"), ((id + " " + (obj.cor) + (obj.pacotes>1?obj.pacotes+"X":""))).toUpperCase());
+    const produtoRef = doc(collection(db, "produtos_pendentes"), ((id + " " + (obj.cor) + (obj.pacotes>1?obj.pacotes+"X":""))+obj.loja).toUpperCase());
 
     try {
         const produtoSnapshot = await getDoc(produtoRef);
@@ -793,19 +846,54 @@ searchBar.oninput = ()=>{
   
     }
 }
-
+//recados
+const recadosDiv = document.getElementById("recados")
 async function getRecados(){
+    recadosDiv.innerHTML=""
     try {
         const snapshot =  await getDocs(collection(db,"recados"));
         snapshot.forEach((doc) => {
-            console.log(doc.data())
+            const data = doc.data()
+            console.log(data)
+            const msgMain = toHtml("div","msg-main")
+            const msgTopBar = toHtml("div","msg-top-bar")
+            const msgBody = toHtml("div","msg-body")
+            msgBody.textContent = data.msg
+
+            const msgDate = toHtml("div","msg-date")
+            msgDate.textContent = `${data.data}  -${data.hora}`
+            
+            const deleteMsg = toHtml("div","msg-delete")
+            deleteMsg.innerHTML=`<ion-icon name="trash-bin-outline"></ion-icon>`
+            deleteMsg.onclick = ()=>{
+                deleteRecados(doc.id,msgMain)
+            }
+            msgTopBar.appendChild(msgDate)
+            msgTopBar.appendChild(deleteMsg)
+            msgMain.appendChild(msgTopBar)
+            msgMain.appendChild(msgBody)
+            recadosDiv.appendChild(msgMain)
         })
     }
     catch{
 
     }
 }
-//getRecados()
+getRecados()
+function deleteRecados(id,element){
+    const documentRef = doc(db, 'recados', id);
+    deleteDoc(documentRef)
+  .then(() => {
+    element.remove()
+  })
+  .catch((error) => {
+    alert("falha ao excluir mensagem abra o console para mais infos")
+    console.error('Erro ao excluir o documento:', error);
+  });
+}
+function setRecados(dados){
+    const documentRef = doc(db, 'suaColecao', idDoDocumento);
+}
 // Função para retornar todas as divs com palavras no ID que correspondem à palavra fornecida
 function encontrarDivsComPalavra(palavra) {
     const elementos = document.querySelectorAll('[id^="div_"]');
