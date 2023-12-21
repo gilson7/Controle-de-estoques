@@ -27,13 +27,20 @@
 }
 .pendente-preview{
     height: 120px;
-    min-width: 120px;
+    width: 100%;
     background-repeat: noe;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
- 
+    margin: 5px;
+    border: solid 1px rgba(var(--cor-escuro-dec),.05);
+    box-shadow: 0 20px 10px rgba(var(--cor-escuro-dec),.05);
 
+}
+.previewMain{
+    display: flex;
+    width: 100%;
+    height: fit-content;
 }
 .pendente .estoque{
     background-color: rgba(var(--cor-escuro-dec),.05);
@@ -184,7 +191,8 @@
 .loja{
     width: 20px;
     height: 20px;
-    left: 3px;
-    top: 3px;
+    left: 6px;
+    top: 6px;
     position: absolute;
+    border-radius: 5px 0 20px 0;
 }

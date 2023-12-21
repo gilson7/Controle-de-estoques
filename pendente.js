@@ -104,12 +104,12 @@ async function obterProdutos() {
         estDiv.classList.add("pendente");
         estDiv.id = `div_${(data.sku).toLowerCase()}`
         //elemento da quantidade de pacotes por post
-        const note = toHtml("div","qtd-pacotes",data.pacotes+"X")
+        
        
         const previewDiv = document.createElement("div");
         previewDiv.classList.add("pendente-preview");
         previewDiv.style.backgroundImage=`url(${data.foto})`
-
+      
         const nomeDiv = document.createElement("div");
         nomeDiv.classList.add("nome");
         
@@ -177,7 +177,7 @@ async function obterProdutos() {
             if (index > 0) {
               doc.addPage();
             }
-            const texto = ((datas[index].id )+  " - " + ((datas[index].variac)+" - "+(data.loja||""))).toUpperCase()
+            const texto = ((datas[index].id )+  " - " + ((datas[index].variac))).toUpperCase()
 
             const tamanho = 20
             const maxWidth = 95
@@ -202,7 +202,8 @@ async function obterProdutos() {
               doc.setFontSize(8)
               doc.text(5, 45, "OBS:"+data.obs);
             }
-          
+            doc.setFontSize(8)
+            doc.text(5, 40, "loja: "+data.loja);
           });
          // Configura a impressão automática ao abrir o PDF
          const pdfBlob = doc.output('blob');
@@ -308,10 +309,16 @@ async function obterProdutos() {
         // Estrutura da árvore de elementos
         nomeDiv.appendChild(skuDiv);
         nomeDiv.appendChild(corDiv)
-        if(parseFloat(data.pacotes)>1){
-          estDiv.appendChild(note)
+     
+
+        const  previewMain = toHtml("div","previewMain","")
+        for (let i = 1; i < parseFloat(data.pacotes) ; i++) {
+          const clonedPreviewDiv = previewDiv.cloneNode(true);
+          previewMain.appendChild(clonedPreviewDiv);
         }
-        estDiv.appendChild(previewDiv);
+        previewMain.appendChild(previewDiv);
+        estDiv.appendChild(previewMain);
+
         estDiv.appendChild(nomeDiv);
         data.obs!=""?estDiv.appendChild(obsDiv):""
 
