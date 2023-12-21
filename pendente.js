@@ -77,9 +77,9 @@ relatorio.onclick = ()=>{
     iframe.src = pdfUrl;
 }
 const cores = {
-  Itaqualy:"orange",
-  Qualyshop:"green",
-  Tekshop:"red"
+  Itaqualy:"#25d928",
+  Qualyshop:"#ffaa3b",
+  Tekshop:"#f73131"
 }
 async function obterProdutos() {
     try {
