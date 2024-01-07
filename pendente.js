@@ -90,12 +90,19 @@ async function obterProdutos() {
         return
       }
       var relatTextSpace = 20
+      var sizeRelat = 0
       snapshot.forEach((docu) => {
         // console.log("ID do documento:", docu.id);
         // console.log("Dados do documento:", docu.data());
         const data  =  docu.data()
         docRelatorio.setFontSize(14)
         docRelatorio.text(10,relatTextSpace+=7,docu.id+"____"+data.quantidade)
+        sizeRelat ++
+        if(sizeRelat>35){
+          docRelatorio.addPage()
+          sizeRelat = 0
+          relatTextSpace = 10
+        }
         quantidadeDePacotes += parseFloat(data.quantidade)
         quantidade_pacotes_element.innerHTML = quantidadeDePacotes+" Pacotes"
         const lojaElement = toHtml("div","loja","")
