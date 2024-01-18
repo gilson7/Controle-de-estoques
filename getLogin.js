@@ -1,5 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
 import { getAuth ,onAuthStateChanged,signOut } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js"
+import { getFirestore,doc,getDoc,collection } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
+
 const firebaseConfig = {
     apiKey: "AIzaSyASSiODHgwFGkwjgwl_E-y1nQLpiuGdXKQ",
     authDomain: "gerenciador-de-estoques.firebaseapp.com",
@@ -9,7 +11,10 @@ const firebaseConfig = {
     appId: "1:543584297763:web:8e7b4f09c11fee0828e296",
     measurementId: "G-TX8X7DRS5E"
  };
- 
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app)
+const auth = getAuth(app);
 function Html(type,ref,content){
     const element = document.createElement(type)
     if(ref[0] == "#"){
@@ -36,16 +41,30 @@ function Html(type,ref,content){
     return element
 }
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+
 var ispp = false
 const elementConfig = document.getElementById("userConfig")
 const elementConfigMobile = document.getElementById("userConfig-mobile")
 onAuthStateChanged(auth, (user) => {
     if (user) {
+        async function getUserType(){
+            try{
+                const docSnapshot  = await getDoc(doc(db, "users", user.uid))
+                if (docSnapshot.exists()){
+                    const data = docSnapshot.data()
+                    localStorage.user_tipo = data.tipo
+                }else{
+                    localStorage.user_tipo = "null" 
+                }
+            }catch(err){
+                console.error(err)
+                localStorage.user_tipo = "null" 
+                return err
+            }
+        }
+        getUserType()
 
         elementConfig.style.backgroundImage = `url(${user.photoURL})`
-
         function generatePopup(){
             if(ispp){
                 //impedindo multiplos popups
@@ -84,6 +103,7 @@ onAuthStateChanged(auth, (user) => {
         elementConfig.onclick = generatePopup
         elementConfigMobile.onclick = generatePopup
         console.log(user)
+        
     }else{
         window.location.href = "login.html"
     }

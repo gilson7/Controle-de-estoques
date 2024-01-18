@@ -26,6 +26,7 @@ function login(){
     signInWithPopup(auth, provider)
     .then((result) => {
         const user = result.user;
+        
     }).catch((error) => {
       // Handle Errors here.
       const errorCode = error.code;

@@ -40,6 +40,10 @@ function toHtml(type,classe,conteudo){
     element.classList.add(classe)
     return element
 }
+function getTypeUser(){
+  return localStorage.user_tipo
+}
+console.log(getTypeUser())
 const estoques = document.getElementById("pendentes")
 const produtosColec = collection(db, "produtos_pendentes");
 const rodape = document.getElementById("rodape")
@@ -92,25 +96,37 @@ async function obterProdutos() {
       }
       var relatTextSpace = 20
       var sizeRelat = 0
+      
+  
+
       snapshot.forEach((docu) => {
-        // console.log("ID do documento:", docu.id);
-        // console.log("Dados do documento:", docu.data());
         const data  =  docu.data()
-        docRelatorio.setFontSize(14)
-        docRelatorio.text(10,relatTextSpace+=7,docu.id+"____"+data.quantidade)
-        sizeRelat ++
-        if(sizeRelat>35){
-          docRelatorio.addPage()
-          sizeRelat = 0
-          relatTextSpace = 10
-        }
-        quantidadeDePacotes += parseFloat(data.quantidade)
-        quantidade_pacotes_element.innerHTML = quantidadeDePacotes+" Pacotes"
-        const lojaElement = toHtml("div","loja","")
-        lojaElement.style.backgroundColor = cores[data.loja]
+
         const estDiv = document.createElement("div");
         estDiv.classList.add("pendente");
         estDiv.id = `div_${(data.sku).toLowerCase()}`
+    
+        if(data.status!="finalizado"){
+          docRelatorio.setFontSize(14)
+          docRelatorio.text(10,relatTextSpace+=7,docu.id+"____"+data.quantidade)
+          sizeRelat ++
+          if(sizeRelat>35){
+            docRelatorio.addPage()
+            sizeRelat = 0
+            relatTextSpace = 10
+          }
+          quantidadeDePacotes += parseFloat(data.quantidade)
+          quantidade_pacotes_element.innerHTML = quantidadeDePacotes+" Pacotes"
+          if(getTypeUser=="embalagem"){
+            return
+          }
+        }else{
+          estDiv.style.opacity="50%"
+        }
+
+        const lojaElement = toHtml("div","loja","")
+        lojaElement.style.backgroundColor = cores[data.loja]
+       
         //elemento da quantidade de pacotes por post
         
        
@@ -235,17 +251,31 @@ async function obterProdutos() {
 
         const removeButton = toHtml("div","removeButton","Finalizar")
         removeButton.onclick= async ()=>{
-          try{
-            await deletarDocumento(docu.id)
-            aviso("Pedido Finalizado Com sucesso",true)
-
-            estDiv.remove()
+          if(getTypeUser()=="ecomerce"){
+            try{
+              await deletarDocumento(docu.id)
+              aviso("Pedido Finalizado Com sucesso",true)
+  
+              estDiv.remove()
+            }
+            catch(erro){
+              aviso("Erro ao finalizar pedido",false)
+              console.log(erro)
+            }
+          }else if(getTypeUser()=="embalagem"){
+            try{
+              const novosDados = JSON.parse(JSON.stringify(data))
+              novosDados.status = "finalizado"
+              await atualizarDocumento(docu.id, novosDados)
+              aviso("Pedido Finalizado Com sucesso",true)
+              estDiv.remove()
+            }
+            catch(erro){
+              aviso("Erro ao finalizar pedido",false)
+              console.log(erro)
+            }
           }
-          catch(erro){
-            aviso("Erro ao finalizar pedido",false)
-            console.log(erro)
-          }
-
+          
         }
         var quanty = 0
         function quantyChange(){
