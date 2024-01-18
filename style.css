@@ -217,11 +217,11 @@ body{
     margin-right: 5px;
     cursor: pointer;
     box-shadow: 2px 2px 3px #7e7fb32d,
-              -5px -5px 16px #ffffff00;
-}
+              -5px -5px 16px #ffffff00; 
+            }
 /* popup pedido */
 .popup-pedido {
-    width: 300px;
+    width: 350px;
     background-color:rgba(var(--cor-escuro-dec), 0.02);
     border: 2px solid rgba(var(--cor-escuro-dec), 0.05);
     padding: 10px;
@@ -680,6 +680,7 @@ canvas{
     transition: 100ms;
     background-color: var(--cor-claro);
     padding: 5px;
+    margin: 2px;
     cursor: pointer;
 }
 .opt-loja.active{

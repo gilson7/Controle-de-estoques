@@ -79,7 +79,8 @@ relatorio.onclick = ()=>{
 const cores = {
   Itaqualy:"#25d928",
   Qualyshop:"#ffaa3b",
-  Tekshop:"#f73131"
+  Tekshop:"#f73131",
+  Shopee:"#000000"
 }
 async function obterProdutos() {
     try {
@@ -237,6 +238,7 @@ async function obterProdutos() {
           try{
             await deletarDocumento(docu.id)
             aviso("Pedido Finalizado Com sucesso",true)
+
             estDiv.remove()
           }
           catch(erro){
@@ -281,9 +283,10 @@ async function obterProdutos() {
             if(novosDados.quantidade!=0){
               atualizarDocumento(docu.id, novosDados)
               .then(() => {         
-                  estoqueDiv.textContent ="Quantidade: "+ parseFloat(data.quantidade) + quanty
-                  quanty = 0
-                  quantyChange()                
+                estoqueDiv.textContent ="Quantidade: "+ parseFloat(data.quantidade) + quanty
+                quanty = 0
+                quantyChange()   
+                
               })
               .catch((error) => {
               console.error("Erro ao atualizar o documento: ", error);
@@ -375,9 +378,6 @@ searchBar.oninput = ()=>{
     }
 }
 // Função para retornar todas as divs com palavras no ID que correspondem à palavra fornecida
-
-  
-   
 function aviso(text,status){
   const avs = document.createElement("div")
   avs.classList.add("aviso")

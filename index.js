@@ -520,7 +520,7 @@ async function obterProdutos() {
             pedidoButton.textContent= "solicitação"
             pedidoButton.className = "pedir"
     
-            const lojas=["Qualyshop","Itaqualy","Tekshop"]
+            const lojas=["Qualyshop","Itaqualy","Tekshop","Shopee"]
             var selectedLojas = lojas[0]
             const values = [1,2,3,4,5,6]
             var selectedValue = values[0]
@@ -636,7 +636,7 @@ async function obterProdutos() {
                         }
                     }
                     if (quantidade_pedido.value!=""&&quantidade_pedido.value!=NaN) {
-                        console.log
+           
                         pedido.pendente = quantidade_pedido.value
                         setPedidos(pedido,doc.id,popup_pedido)
                     }
