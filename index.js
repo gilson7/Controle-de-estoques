@@ -798,7 +798,7 @@ function setProduto(obj,id){
 
 async function setPedidos(obj, id, popup) {
     
-    const produtoRef = doc(collection(db, "produtos_pendentes"), ((id + " " + (obj.cor) + (obj.pacotes>1?obj.pacotes+"X":""))+obj.loja).toUpperCase());
+    const produtoRef = doc(collection(db, "produtos_pendentes"), ((id + " " + (obj.cor) + (obj.pacotes>1?obj.pacotes+"X":""))+obj.loja+obj.obs).toUpperCase());
 
     try {
         const produtoSnapshot = await getDoc(produtoRef);
