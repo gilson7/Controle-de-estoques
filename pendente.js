@@ -1,7 +1,7 @@
  // Import the functions you need from the SDKs you need
  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-analytics.js";
- import { getFirestore ,getDocs,collection,doc,setDoc ,updateDoc ,deleteDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
+ import { getFirestore ,getDocs,collection,doc,setDoc ,updateDoc ,deleteDoc ,query,orderBy} from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
  // TODO: Add SDKs for Firebase products that you want to use
  // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -88,7 +88,8 @@ const cores = {
 }
 async function obterProdutos() {
     try {
-      const snapshot = await getDocs(produtosColec);
+      const q = query(produtosColec, orderBy('loja'));
+      const snapshot = await getDocs(q);
       if(!snapshot.size){
         quantidadeDePacotes=0
         quantidade_pacotes_element.innerHTML = quantidadeDePacotes+" Pacotes"
