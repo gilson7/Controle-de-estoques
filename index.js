@@ -614,7 +614,7 @@ async function obterProdutos() {
                 button_pedido.onclick = () =>{
                     const pedido = { 
                                 foto:data.foto,
-                                sku:doc.id,
+                                sku:data.sku,
                                 cor:variac.cor,
                                 quantidade:quantidade_pedido.value,
                                 obs:obsPedido.value,
@@ -627,8 +627,15 @@ async function obterProdutos() {
                         const resultado = sku.match(regex); // Procura o padrão na string
                         if (resultado !== null) {
                             console.log(resultado[0]); // Retorna o primeiro número encontrado
-                            sku = sku.replace(resultado[0],resultado[0]*pedido.pacotes)
-                            pedido.sku=sku
+                            var firstFoundedNumber = parseInt(resultado[0])
+                            if(!firstFoundedNumber){
+                                //impedindo a existencia de resutados vazios na quantidade de pacotes caso o sku não especifique a quantidade
+                                firstFoundedNumber = 1
+                                sku = firstFoundedNumber*pedido.pacotes + sku 
+                            }else{
+                                sku = sku.replace(resultado[0],resultado[0]*pedido.pacotes)
+                                pedido.sku=sku
+                            }
                         }
                         if(sku.toUpperCase().includes("MESA")&&sku.toUpperCase().includes("BQT")){
                             sku = inserirNumeroAntesDaPalavra(sku, "MESA", pedido.pacotes)
@@ -636,7 +643,6 @@ async function obterProdutos() {
                         }
                     }
                     if (quantidade_pedido.value!=""&&quantidade_pedido.value!=NaN) {
-           
                         pedido.pendente = quantidade_pedido.value
                         setPedidos(pedido,doc.id,popup_pedido)
                     }

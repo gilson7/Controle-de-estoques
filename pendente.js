@@ -167,6 +167,8 @@ async function obterProdutos() {
         printButton.innerHTML='<ion-icon name="print-outline"></ion-icon> Print SKU'
         const obsDiv = toHtml("div","obsDiv","")
         obsDiv.textContent = "OBS: "+ data.obs
+
+        
         printButton.onclick =()=>{
           const datas = []
           const divsToPrint = []
@@ -247,23 +249,20 @@ async function obterProdutos() {
          // Define o PDF como a fonte do iframe
          iframe.src = pdfUrl;
         }
-
-
-
         const removeButton = toHtml("div","removeButton","Finalizar")
         removeButton.onclick= async ()=>{
-          if(getTypeUser()=="ecomerce"){
+          const userType = getTypeUser().replace('"',"").replace('"',"")
+          if(userType =="ecomerce"){
             try{
               await deletarDocumento(docu.id)
               aviso("Pedido Finalizado Com sucesso",true)
-  
               estDiv.remove()
             }
             catch(erro){
               aviso("Erro ao finalizar pedido",false)
               console.log(erro)
             }
-          }else if(getTypeUser()=="embalagem"){
+          }else if(userType == "embalagem"){
             try{
               const novosDados = JSON.parse(JSON.stringify(data))
               novosDados.status = "finalizado"
@@ -275,6 +274,8 @@ async function obterProdutos() {
               aviso("Erro ao finalizar pedido",false)
               console.log(erro)
             }
+          }else{
+            aviso("erro nenhuma das condições se satisfazem"+"tipo: "+getTypeUser(),false)
           }
           
         }
