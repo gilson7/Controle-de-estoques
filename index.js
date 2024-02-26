@@ -42,8 +42,14 @@ function inserirNumeroAntesDaPalavra(texto, palavra, numero) {
     appId: "1:543584297763:web:8e7b4f09c11fee0828e296",
     measurementId: "G-TX8X7DRS5E"
  };
-
-
+ function randomCode(tamanho){
+    let codigo = ""
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&()-_=+[{]}|;:,.<>?'; 
+    for (let i = 0; i < tamanho; i++) {
+        codigo += caracteres[Math.floor(Math.random() * caracteres.length)];
+    }
+    return codigo;
+ }
  // Initialize Firebase
  const app = initializeApp(firebaseConfig);
  const db = getFirestore(app);
@@ -118,8 +124,6 @@ function aviso(text,status){
         avs.remove()
     },3500)
 }
-
-
 let canvas  = document.createElement("canvas")
 canvas.width = 200
 canvas.height = 200
@@ -131,12 +135,6 @@ function generateImage(img){
     const screenshot = canvas.toDataURL('image/png');
     return screenshot
 }
-
-
-
-
-
-
 const popupDiv = document.createElement("div");
 popupDiv.classList.add("popup");
 
@@ -152,8 +150,6 @@ topBarDiv.appendChild(closeButton);
 closeButton.onclick=()=>{
     popupDiv.remove()
 }
-
-
 const contentDiv = document.createElement("div");
 contentDiv.id = "content";
 
@@ -431,14 +427,14 @@ const produtosColec = collection(db, "produtos");
 async function obterProdutos() {
     try {
       const snapshot =  await getDocs(produtosColec);
+ 
       snapshot.forEach((doc) => {
-        if(!isCategory(doc.id.toUpperCase())){
+        var data  =  doc.data()
+        if(!isCategory(data.sku)){
             return
         }
         console.log("ID do documento:", doc.id);
         console.log("Dados do documento:", doc.data());
-
-        var data  =  doc.data()
         var originalestoques = {...doc.data()}
 
         const saveButton = document.createElement("div")
@@ -801,24 +797,32 @@ function setProduto(obj,id){
     });
 }
 
-
 async function setPedidos(obj, id, popup) {
-    
-    const produtoRef = doc(collection(db, "produtos_pendentes"), ((id + " " + (obj.cor) + (obj.pacotes>1?obj.pacotes+"X":""))+obj.loja+obj.obs).toUpperCase());
-
+    const stringRef = ((id + " " + (obj.cor) + (obj.pacotes>1?obj.pacotes+"X":""))+obj.loja+obj.obs).toUpperCase()
+    const produtoRef = doc(collection(db, "produtos_pendentes"),stringRef);
     try {
+        //atualiza o documento 
         const produtoSnapshot = await getDoc(produtoRef);
-
         if (produtoSnapshot.exists()) {
             // O documento existe, então vamos atualizar o estoque
             const produtoData = produtoSnapshot.data();
-
-            const novoEstoque = (parseInt(produtoData.quantidade )|| 0) + parseInt(obj.quantidade); // Atualizar o estoque conforme necessário
-
-            await updateDoc(produtoRef, { quantidade: novoEstoque }); // Atualizar o estoque no documento existente
+            const novoPendente = [...produtoData.pendentes]
+            const novoEstoque = novoPendente.length; // Atualizar o estoque conforme necessário
+            for(let i=0 ; i < obj.quantidade ; i++){
+                const code = randomCode(3)
+                novoPendente.push(stringRef+"*"+code)
+            }
+            await updateDoc(produtoRef, { quantidade: novoEstoque,pendente}); // Atualizar o estoque no documento existente
             console.log("Estoque atualizado com sucesso!");
         } else {
             // O documento não existe, então vamos criá-lo
+   
+            const novoPendente =  []
+            for(let i=0 ; i < obj.quantidade ; i++){
+                const code = randomCode(3)
+                novoPendente.push(stringRef+"*"+code)
+            }
+            obj.pendentes = novoPendente
             await setDoc(produtoRef, obj);
             console.log("Novo documento definido com sucesso!");
         }
@@ -829,7 +833,6 @@ async function setPedidos(obj, id, popup) {
         aviso("Falha ao realizar pedido, visite o console para mais informações", false);
     }
 }
-
 // Função para atualizar um documento
 async function  atualizarDocumento(id, novosDados) {
     const produtosColec = "produtos"; // Substitua pelo nome da coleção
@@ -981,10 +984,10 @@ function horaFormatada() {
   }
   
   // Função para retornar data formatada
-  function dataFormatada() {
+function dataFormatada() {
     const hoje = new Date();
     const dia = hoje.getDate().toString().padStart(2, '0'); // Obtém o dia do mês e garante dois dígitos
     const mes = (hoje.getMonth() + 1).toString().padStart(2, '0'); // Obtém o mês atual e garante dois dígitos
     const ano = hoje.getFullYear(); // Obtém o ano atual
     return `${dia}/${mes}/${ano}`; // Retorna a data formatada
-  }
+}

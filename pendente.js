@@ -28,6 +28,15 @@ function generateRandomCode(){
   }
   return numeroAleatorio + alfabet[indexAlfabet()]
 }
+function randomCode(tamanho){
+  //gera um codigo aleatorio
+  let codigo = ""
+  const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&()-_=+[{]}|;:,.<>?'; 
+  for (let i = 0; i < tamanho; i++) {
+      codigo += caracteres[Math.floor(Math.random() * caracteres.length)];
+  }
+  return codigo;
+}
 function toHtml(type,classe,conteudo){
     const element = document.createElement(type)
     if(!conteudo){
@@ -170,41 +179,25 @@ async function obterProdutos() {
 
         
         printButton.onclick =()=>{
-          const datas = []
-          const divsToPrint = []
-          for (let index = 0; index < parseFloat(data.quantidade); index++) {
-            const dataObject = {
-              id: data.sku,
-              variac:data.cor,
-              code: generateRandomCode(),
-
-            };
-            datas.push(dataObject)
-          }
-       
-          datas.map(ele=>{
-            const qrcode = toHtml('img','qr','')
-            const jsonData = JSON.stringify(ele);
-            const qr = new QRious({
-              element: qrcode,
-              value: jsonData,
-              size: 300
-          });
-            console.log(datas)
-            divsToPrint.push(qrcode)
-          })
-
+          //percorrendo os pendentes
           const doc = new jsPDF({
             orientation: 'landscape', // Escolha 'portrait' ou 'landscape' conforme desejado
             unit: 'mm',
             format: [100, 50]
           })
-
-          divsToPrint.forEach((img, index) => {
+          data.pendentes.map((code,index)=>{
+            const qrcode = toHtml('img','qr','')
+            //criando qrcode
+            const qr = new QRious({
+              element: qrcode,
+              value: code,
+              size: 300
+            })
+            
             if (index > 0) {
               doc.addPage();
             }
-            const texto = ((datas[index].id )+  " - " + ((datas[index].variac))).toUpperCase()
+            const texto = (data.sku+" - "+data.cor).toUpperCase()
 
             const tamanho = 20
             const maxWidth = 95
@@ -222,14 +215,20 @@ async function obterProdutos() {
           
             doc.text((maxWidth/2)  - (larguraTexto / 2) + 2, 10, texto);
 
-            doc.addImage(img, (maxWidth/2) - 10 , 17, 20, 20);
+            doc.addImage(qrcode, (maxWidth/2) - 10 , 17, 20, 20);
             if(data.obs!=""){
               doc.setFontSize(8)
               doc.text(5, 45, "OBS:"+data.obs);
             }
             doc.setFontSize(8)
             doc.text(5, 40, "loja: "+data.loja);
-          });
+         
+          })
+       
+
+        
+
+         
          // Configura a impressão automática ao abrir o PDF
          const pdfBlob = doc.output('blob');
 
@@ -310,19 +309,34 @@ async function obterProdutos() {
           }
       }
         saveButton.onclick = ()=>{
+          //salvando alteracao nos pendentes
             const novosDados = data
             novosDados.quantidade = parseFloat(data.quantidade) + quanty
+
             if(novosDados.quantidade!=0){
+              if(novosDados.quantidade<novosDados.pendentes.length){
+                //obtendo o quantia a ser removida
+                const sizeToRemove = novosDados.pendentes.length - novosDados.quantidade 
+                console.log("tamanhos para remover: "+sizeToRemove)
+                novosDados.pendentes.splice(0,sizeToRemove) 
+              }
+              else{
+                //obtendo o quantia a ser adcionada
+                const sizeToAdd = novosDados.quantidade - novosDados.pendentes.length 
+                for (let i = 0; i < sizeToAdd; i++) {
+                  novosDados.pendentes.push(docu.id+"*"+randomCode(3))  
+                }
+              }
               atualizarDocumento(docu.id, novosDados)
               .then(() => {         
                 estoqueDiv.textContent ="Quantidade: "+ parseFloat(data.quantidade) + quanty
                 quanty = 0
                 quantyChange()   
-                
               })
               .catch((error) => {
               console.error("Erro ao atualizar o documento: ", error);
               });
+
             }else{
                 const docRef = doc(db, 'produtos_pendentes',docu.id);
                 deleteDoc(docRef)
@@ -395,7 +409,7 @@ async function  deletarDocumento(id) {
   // Use o método updateDoc para atualizar os dados do documento
   return  deleteDoc(produtoRef);
 }
-
+//motor de pesquisa
 const searchBar = document.getElementById("search")
 searchBar.oninput = ()=>{
     var elementos = []
