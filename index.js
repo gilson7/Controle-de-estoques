@@ -807,12 +807,13 @@ async function setPedidos(obj, id, popup) {
             // O documento existe, então vamos atualizar o estoque
             const produtoData = produtoSnapshot.data();
             const novoPendente = [...produtoData.pendentes]
-            const novoEstoque = novoPendente.length; // Atualizar o estoque conforme necessário
+             // Atualizar o estoque conforme necessário
             for(let i=0 ; i < obj.quantidade ; i++){
                 const code = randomCode(3)
                 novoPendente.push(stringRef+"*"+code)
             }
-            await updateDoc(produtoRef, { quantidade: novoEstoque,pendente}); // Atualizar o estoque no documento existente
+            const novoEstoque = novoPendente.length;
+            await updateDoc(produtoRef, {quantidade:novoEstoque,pendente:novoEstoque,pendentes:novoPendente}); // Atualizar o estoque no documento existente
             console.log("Estoque atualizado com sucesso!");
         } else {
             // O documento não existe, então vamos criá-lo
