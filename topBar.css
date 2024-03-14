@@ -33,7 +33,7 @@
     border: none;
     outline: none;
     color: var(--cor-escuro);
-    transition: cubic-bezier(0.19, 1, 0.22, 1) 200ms;
+    /* transition: cubic-bezier(0.19, 1, 0.22, 1) 200ms; */
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
@@ -178,6 +178,24 @@ nav img{
     display: none;       
     
 }
+#menu #closeMenu .md.hydrated{
+    color: rgba(var(--cor-escuro-dec),1);
+    font-size:40px;
+}
+#menu .title {
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+}
+#menu  h1{
+    color: var(--cor-escuro);
+    margin: 0;
+    font-size: 20px;
+    font-weight: 400;
+    margin:0 15px ;
+ 
+}
+
 @media only screen and (max-width: 600px) {
     .navigator-mobile{
         display: flex; 
@@ -191,6 +209,26 @@ nav img{
         text-decoration: none;
         cursor: pointer;
         text-transform: capitalize;
+    }
+    .popup-user-config{
+        width: 100vw ;
+        display: flex;
+        flex-direction: row;
+        margin: auto;
+        left: 0;
+        right: 0;
+        position: relative;
+        justify-content: space-between;
+        padding: 0;
+        border-radius: 0;
+        border: none;
+    }
+    
+    .popup-user-config div{
+        margin: 5px;
+    }
+    .email-user-config{
+        font-size: 10px;
     }
     nav{
         border: none;
@@ -208,13 +246,34 @@ nav img{
         width: 70px;
     }
     #menu{
-
-        display: none;
-        background-color: rgba(var(--cor-claro-dec),.8);
+        pointer-events: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        transform: translateX(100vw);
         width: 100vw;
         height: 100vh;
+        z-index: 999;
+
+    }
+    #menu.active{
+        pointer-events: all;
+        display: block;
+        transform: translateX(0vw);
         position: fixed;
-        backdrop-filter: blur(10px);
-        z-index: 9999;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        background-color: rgba(var(--cor-claro-dec),1);
+        border-radius: 0;
+    }
+    #opts{
+     
+        width: calc(100% - 20px);
+        margin: auto;
+        margin-top: 20px;
+    }
+    #opts a{
+        text-decoration: none;
     }
   }

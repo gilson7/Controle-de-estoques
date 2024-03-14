@@ -307,7 +307,7 @@ async function obterProdutos() {
             quanty-=1
             quantyChange()
           }
-      }
+        } 
         saveButton.onclick = ()=>{
           //salvando alteracao nos pendentes
             const novosDados = data
@@ -324,7 +324,7 @@ async function obterProdutos() {
                 //obtendo o quantia a ser adcionada
                 const sizeToAdd = novosDados.quantidade - novosDados.pendentes.length 
                 for (let i = 0; i < sizeToAdd; i++) {
-                  novosDados.pendentes.push(docu.id+"*"+randomCode(3))  
+                  novosDados.pendentes.push(docu.id+"*"+randomCode(3)+"*"+data.sku+"*"+data.pacotes+"*"+data.cor)  
                 }
               }
               atualizarDocumento(docu.id, novosDados)

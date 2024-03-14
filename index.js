@@ -42,19 +42,10 @@ function inserirNumeroAntesDaPalavra(texto, palavra, numero) {
     appId: "1:543584297763:web:8e7b4f09c11fee0828e296",
     measurementId: "G-TX8X7DRS5E"
  };
- function randomCode(tamanho){
-    let codigo = ""
-    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&()-_=+[{]}|;:,.<>?'; 
-    for (let i = 0; i < tamanho; i++) {
-        codigo += caracteres[Math.floor(Math.random() * caracteres.length)];
-    }
-    return codigo;
- }
  // Initialize Firebase
  const app = initializeApp(firebaseConfig);
  const db = getFirestore(app);
  const storage = getStorage(app);
-
  const analytics = getAnalytics(app);
  console.log(db)
 
@@ -66,7 +57,14 @@ const db_object = {
 
     ],
 }
-
+function randomCode(tamanho){
+    let codigo = ""
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&()-_=+[{]}|;:,.<>?'; 
+    for (let i = 0; i < tamanho; i++) {
+        codigo += caracteres[Math.floor(Math.random() * caracteres.length)];
+    }
+    return codigo;
+}
 
 function isCategory(id){
 const conditions={
@@ -810,7 +808,7 @@ async function setPedidos(obj, id, popup) {
              // Atualizar o estoque conforme necessário
             for(let i=0 ; i < obj.quantidade ; i++){
                 const code = randomCode(3)
-                novoPendente.push(stringRef+"*"+code)
+                novoPendente.push(stringRef+"*"+code+"*"+id+"*"+obj.pacotes+"*"+obj.cor)
             }
             const novoEstoque = novoPendente.length;
             await updateDoc(produtoRef, {quantidade:novoEstoque,pendente:novoEstoque,pendentes:novoPendente}); // Atualizar o estoque no documento existente
@@ -821,7 +819,7 @@ async function setPedidos(obj, id, popup) {
             const novoPendente =  []
             for(let i=0 ; i < obj.quantidade ; i++){
                 const code = randomCode(3)
-                novoPendente.push(stringRef+"*"+code)
+                novoPendente.push(stringRef+"*"+code+"*"+id+"*"+obj.pacotes+"*"+obj.cor)
             }
             obj.pendentes = novoPendente
             await setDoc(produtoRef, obj);

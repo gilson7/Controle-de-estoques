@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leitor de codigo QR</title>
+    <link rel="stylesheet" href="topBar.css">
+</head>
+<body>
+    <div id="qrArea">
+        <video id="video" autoplay></video>
+        <div id="LearnArea">
+            <svg width="238" height="238" viewBox="0 0 238 238" fill="" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M22.966 59.466C22.966 39.3076 39.3076 22.966 59.466 22.966H82.7187C84.0994 22.966 85.2187 24.0852 85.2187 25.466V25.466C85.2187 26.8467 84.0994 27.966 82.7187 27.966H59.466C42.069 27.966 27.966 42.069 27.966 59.466V82.7187C27.966 84.0994 26.8467 85.2187 25.466 85.2187V85.2187C24.0852 85.2187 22.966 84.0994 22.966 82.7187V59.466ZM178.534 27.966H155.281C153.901 27.966 152.781 26.8467 152.781 25.466V25.466C152.781 24.0852 153.901 22.966 155.281 22.966H178.534C198.692 22.966 215.034 39.3076 215.034 59.466V82.7187C215.034 84.0994 213.915 85.2187 212.534 85.2187V85.2187C211.153 85.2187 210.034 84.0994 210.034 82.7187V59.466C210.034 42.069 195.931 27.966 178.534 27.966ZM25.466 152.781C26.8467 152.781 27.966 153.901 27.966 155.281V178.534C27.966 195.931 42.069 210.034 59.466 210.034H82.7187C84.0994 210.034 85.2187 211.153 85.2187 212.534V212.534C85.2187 213.915 84.0994 215.034 82.7187 215.034H59.466C39.3076 215.034 22.966 198.692 22.966 178.534V155.281C22.966 153.901 24.0852 152.781 25.466 152.781V152.781ZM210.034 178.534V155.281C210.034 153.901 211.153 152.781 212.534 152.781V152.781C213.915 152.781 215.034 153.901 215.034 155.281V178.534C215.034 198.692 198.692 215.034 178.534 215.034H155.281C153.901 215.034 152.781 213.915 152.781 212.534V212.534C152.781 211.153 153.901 210.034 155.281 210.034H178.534C195.931 210.034 210.034 195.931 210.034 178.534Z" fill="black"/>
+            </svg>
+            </div>
+            <div id="contador">0 Bipados</div>
+            <button id="confirmar">Confirmar</button>
+        </div>
+    <div id="post">
+        <div class="topBar"><div id="closeBipados"><ion-icon name="close-outline"></ion-icon></div><span>Bipados</span></div>
+        <div id="posts">
+
+        </div>
+        <button id="postButton">Registrar Saida</button>
+    </div>
+
+    <style>
+        
+        body{
+            margin: 0;
+            border-radius: 0;
+        }
+        .topBar{
+            display: flex;
+            align-items: center;
+            
+        }
+        
+        .topBar span{
+            text-align: center;
+            width: 100%;
+            font-size: 20px;
+            margin-left: -40px;
+            font-weight: 600;
+        }
+        
+        .topBar #closeBipados{
+            float: left;
+            margin-left: 10px;
+            font-size: 40px;
+            height: fit-content;
+            width: 40px;
+            height: 40px;
+            
+        }
+        #post{
+            background-color: rgb(236, 236, 236);
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 999999;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            display: none;
+            padding-top: 10px;
+        }
+        #posts{
+            width: calc(100% - 20px);
+            margin: auto;
+            height:calc( 100vh - 110px);
+        }
+        .itt{
+            background-color: var(--cor-claro);
+            padding: 5px;
+            font-size: 12px;
+            margin-top: 3px;
+            text-transform: uppercase;
+            justify-content: space-between;
+        }
+        .itt.true{
+            background-color: var(--cor-positivo);
+        }
+        #post button{
+            transition: 100ms;
+            display: block;
+            margin-top: 10px;
+            font-size: 20px;
+            width: calc(100% - 20px);
+            margin: auto;
+            padding:10px 0 ;
+            font-weight: 400;
+            color: var(--cor-positivo);
+            background-color: var(--cor-claro);
+            box-shadow: 0 20px 10px rgba(var(--cor-escuro-dec),.05);
+            font-weight: 600;
+        }
+        #post button:active{
+            transform: scale(.95);
+        }
+        video{
+            object-fit: cover;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            border-radius: 0;
+        }
+        #contador{
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: var(--cor-claro);
+            padding: 3px 5px;
+        }
+        #confirmar.active{
+            position: fixed;
+            font-size: 20px;
+            width: calc(100% - 20px);
+            left: 0;
+            right: 0;
+            bottom: 10px;
+            margin: auto;
+            padding:10px 0 ;
+            font-weight: 900;
+            background-color: var(--cor-positivo);
+        }
+        #LearnArea{
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: calc(100vw - 20px);
+            height: calc(100vw - 20px); 
+            margin: auto;  
+            border-radius: 0;    
+        }
+        #LearnArea svg{
+            width: 100%;
+            height: 100%;
+        }
+        #qrArea svg path {
+            fill: var(--cor-escuro);
+        }
+        #qrArea.active svg path{
+            fill: var(--cor-positivo);
+        }
+    
+
+    </style>
+    <script src="getLogin.js" type="module"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+    <script src="qr.js" type="module"></script>
+    <script  type = "module"  src = "https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script> 
+    <script  nomodule  src = "https://unpkg .com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

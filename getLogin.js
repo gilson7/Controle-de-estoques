@@ -44,7 +44,9 @@ function Html(type,ref,content){
 
 var ispp = false
 const elementConfig = document.getElementById("userConfig")
-const elementConfigMobile = document.getElementById("userConfig-mobile")
+const elementConfigMobile = document.getElementById("menuButton")
+const removeMenu = document.getElementById("closeMenu")
+const menu = document.getElementById("menu")
 onAuthStateChanged(auth, (user) => {
     if (user) {
         async function getUserType(){
@@ -65,7 +67,7 @@ onAuthStateChanged(auth, (user) => {
         getUserType()
 
         elementConfig.style.backgroundImage = `url(${user.photoURL})`
-        function generatePopup(){
+        function generatePopup(type){
             if(ispp){
                 //impedindo multiplos popups
                 return
@@ -86,14 +88,19 @@ onAuthStateChanged(auth, (user) => {
                 });
             }
             preview.style.backgroundImage = `url(${user.photoURL})`
-            document.body.appendChild(popup)
+            type=="mob"?menu.appendChild(popup):document.body.appendChild(popup)
+            menu.innerHTML+=`
+                <div id="opts">
+                    <a href="./qr.html">Leitor De Codigo QR</a>
+                </div>
+            `
             ispp = true
             document.onclick = e=>{
                 if(e.target.className!="popup-user-config"
                 &&
                     e.target.parentNode.className!="popup-user-config"
                 &&
-               ( e.target.id!="userConfig"&& e.target.id!="userConfig-mobile")){
+               ( e.target.id!="userConfig"&& e.target.id!="userConfig-mobile")&&type!="mob"){
                     console.log(e.target.className)
                     popup.remove()
                     ispp = false
@@ -101,7 +108,18 @@ onAuthStateChanged(auth, (user) => {
             }
         }   
         elementConfig.onclick = generatePopup
-        elementConfigMobile.onclick = generatePopup
+        elementConfigMobile.onclick = ()=>{
+            generatePopup("mob")
+           
+            if(menu.classList.value.includes("active")){
+                menu.classList.remove("active")
+                return
+            }
+            menu.classList.add("active")
+        }
+        removeMenu.onclick = ()=>{
+            elementConfigMobile.click()
+        }
         console.log(user)
         
     }else{
