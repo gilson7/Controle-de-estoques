@@ -178,7 +178,7 @@ nav img{
     display: none;       
     
 }
-#menu #closeMenu .md.hydrated{
+#menu #closeMenuOp .md.hydrated{
     color: rgba(var(--cor-escuro-dec),1);
     font-size:40px;
 }
@@ -275,5 +275,6 @@ nav img{
     }
     #opts a{
         text-decoration: none;
+        font-size: 20px;
     }
   }

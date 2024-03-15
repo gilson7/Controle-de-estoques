@@ -196,3 +196,9 @@
     position: absolute;
     border-radius: 5px 0 20px 0;
 }
+.empty{
+    margin-top: 20px;
+    font-size: 16px;
+    color: var(--cor-escuro);
+    opacity: .3;
+}

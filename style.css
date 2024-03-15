@@ -101,14 +101,17 @@ body{
 .rodape{
     display: flex;
     justify-content:center;
+    border-top: solid 1px rgba(var(--cor-azul-dec), 0.1);
+    align-items: center;
+    padding: 5px 0;
 }
 #add{
     background-color: var(--cor-azul);
     color: var(--cor-claro);
     cursor: pointer;
     text-align: center;
-    padding: 10px 20px;
-    margin-top: 5px;
+    padding: 0 20px;
+    height: 37px;
     font-weight: 100;
     font-size: 17px;
     width: fit-content;
@@ -124,7 +127,7 @@ body{
     cursor: pointer;
     text-align: center;
     padding: 10px;
-    margin-top: 5px;
+ 
     font-weight: 100;
     font-size: 17px;
     width: fit-content;

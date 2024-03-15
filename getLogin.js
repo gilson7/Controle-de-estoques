@@ -45,8 +45,10 @@ function Html(type,ref,content){
 var ispp = false
 const elementConfig = document.getElementById("userConfig")
 const elementConfigMobile = document.getElementById("menuButton")
-const removeMenu = document.getElementById("closeMenu")
+const removeMenu = document.getElementById("closeMenuOp")
 const menu = document.getElementById("menu")
+
+
 onAuthStateChanged(auth, (user) => {
     if (user) {
         async function getUserType(){
@@ -89,11 +91,13 @@ onAuthStateChanged(auth, (user) => {
             }
             preview.style.backgroundImage = `url(${user.photoURL})`
             type=="mob"?menu.appendChild(popup):document.body.appendChild(popup)
-            menu.innerHTML+=`
-                <div id="opts">
-                    <a href="./qr.html">Leitor De Codigo QR</a>
-                </div>
-            `
+            const optElement = document.createElement("div")
+            optElement.id = "opts"
+            const opt_qr = document.createElement("a")
+            opt_qr.href = "./qr.html"
+            opt_qr.innerText = "Qr coder"
+            optElement.appendChild(opt_qr)
+            menu.appendChild(optElement)
             ispp = true
             document.onclick = e=>{
                 if(e.target.className!="popup-user-config"
@@ -110,19 +114,21 @@ onAuthStateChanged(auth, (user) => {
         elementConfig.onclick = generatePopup
         elementConfigMobile.onclick = ()=>{
             generatePopup("mob")
-           
             if(menu.classList.value.includes("active")){
                 menu.classList.remove("active")
                 return
             }
             menu.classList.add("active")
         }
-        removeMenu.onclick = ()=>{
-            elementConfigMobile.click()
-        }
+       
         console.log(user)
         
     }else{
         window.location.href = "login.html"
     }
 })
+removeMenu.onclick = ()=>{
+    elementConfigMobile.click()
+}
+console.log(removeMenu.onclick)
+

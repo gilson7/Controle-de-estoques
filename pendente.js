@@ -101,17 +101,14 @@ async function obterProdutos() {
       const snapshot = await getDocs(q);
       if(!snapshot.size){
         quantidadeDePacotes=0
+        estoques.innerHTML=`<div class="empty">Nenhum pedido pendente</div>`
         quantidade_pacotes_element.innerHTML = quantidadeDePacotes+" Pacotes"
         return
       }
       var relatTextSpace = 20
       var sizeRelat = 0
-      
-  
-
-      snapshot.forEach((docu) => {
+      snapshot.forEach((docu)=>{
         const data  =  docu.data()
-
         const estDiv = document.createElement("div");
         estDiv.classList.add("pendente");
         estDiv.id = `div_${(data.sku).toLowerCase()}`
