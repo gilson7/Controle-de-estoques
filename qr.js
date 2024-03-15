@@ -34,8 +34,12 @@ async function  atualizarDocumento(id, novosDados) {
 }
 
 const video = document.getElementById('video');
-
-navigator.mediaDevices.getUserMedia({ video: true })
+const constraints = {
+    video: {
+        facingMode: 'environment' // Para acessar a câmera traseira
+    }
+};
+navigator.mediaDevices.getUserMedia(constraints)
   .then(function(stream) {
     // sucesso, stream contém a câmera de vídeo
     video.srcObject = stream
@@ -44,6 +48,7 @@ navigator.mediaDevices.getUserMedia({ video: true })
     // erro ao acessar a câmera
     console.log(err)
   });
+
 let bipCount = 0 
 const confirmButtom = document.getElementById("confirmar")
 let objectToPost = []
