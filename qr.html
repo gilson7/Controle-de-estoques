@@ -30,6 +30,7 @@
         body{
             margin: 0;
             border-radius: 0;
+            overflow: hidden;
         }
         .topBar{
             display: flex;
@@ -61,9 +62,9 @@
             right: 0;
             z-index: 999999;
             width: 100vw;
-            height: 100vh;
+            height: 100%;
             border-radius: 0;
-            display: none;
+            /* display: none; */
             padding-top: 10px;
         }
         #posts{
@@ -95,6 +96,7 @@
             background-color: var(--cor-claro);
             box-shadow: 0 20px 10px rgba(var(--cor-escuro-dec),.05);
             font-weight: 600;
+
         }
         #post button:active{
             transform: scale(.95);
@@ -137,6 +139,7 @@
             height: calc(100vw - 20px); 
             margin: auto;  
             border-radius: 0;    
+            
         }
         #LearnArea svg{
             width: 100%;
