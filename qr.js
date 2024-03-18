@@ -16,7 +16,6 @@ const beep = new Audio()
 beep.src = "./beep.mp3"
 beep.volume = 0
 beep.play()
-
 async function obterDocumento(id){
     const produtosColec = "produtos"; // Substitua pelo nome da coleção
     // Crie uma referência ao documento que você deseja atualizar
@@ -25,14 +24,12 @@ async function obterDocumento(id){
     return  await getDoc(produtoRef)
 }
 async function  atualizarDocumento(id, novosDados) {
-    console.log(novosDados)
     const produtosColec = "produtos"; // Substitua pelo nome da coleção
     // Crie uma referência ao documento que você deseja atualizar
     const produtoRef = doc(collection(db, produtosColec), id);
     // Use o método updateDoc para atualizar os dados do documento
     return  await updateDoc(produtoRef, novosDados)
 }
-
 const video = document.getElementById('video');
 const constraints = {
     video: {
@@ -48,7 +45,6 @@ navigator.mediaDevices.getUserMedia(constraints)
     // erro ao acessar a câmera
     console.log(err)
   });
-
 let bipCount = 0 
 const confirmButtom = document.getElementById("confirmar")
 let objectToPost = []
@@ -83,7 +79,6 @@ video.addEventListener('play', function() {
                 cor:cor,
                 code:codeRef
             })
-            
             execAnimation()
         }
         lastCode=data
@@ -106,7 +101,7 @@ function execAnimation(){
     setTimeout(()=>{
         scanArea.classList.remove("active")
     },500)
-    beep.stop()
+   
 }
 confirmButtom.onclick = ()=>{
     document.getElementById("post").style.display="block"
@@ -125,7 +120,6 @@ postButton.onclick = ()=>{
         tasksPost.push(async function(){
                 const doc =  await obterDocumento(obj.ref)
                 const data = doc.data()
-                console.log(data)
                 const variac = data.variacoes.find(vari => vari.cor === obj.cor);
                 variac.estoque-=obj.quant
                 if(variac.estoque<0){
@@ -139,7 +133,7 @@ postButton.onclick = ()=>{
     load(true)
     Promise.all(tasksPost.map(task => task()))
     .then((result) => {
-       console.log(result)
+        console.log("postado com sucesso")
        load(false)
     })
     .catch(error => {

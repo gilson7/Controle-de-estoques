@@ -67,8 +67,10 @@ onAuthStateChanged(auth, (user) => {
             }
         }
         getUserType()
-
-        elementConfig.style.backgroundImage = `url(${user.photoURL})`
+        if(elementConfig){
+            elementConfig.style.backgroundImage = `url(${user.photoURL})`
+        }
+      
         function generatePopup(type){
             if(ispp){
                 //impedindo multiplos popups
@@ -96,6 +98,7 @@ onAuthStateChanged(auth, (user) => {
             const opt_qr = document.createElement("a")
             opt_qr.href = "./qr.html"
             opt_qr.innerText = "Qr coder"
+            opt_qr.className = "link qrcode"
             optElement.appendChild(opt_qr)
             menu.appendChild(optElement)
             ispp = true
@@ -120,8 +123,6 @@ onAuthStateChanged(auth, (user) => {
             }
             menu.classList.add("active")
         }
-       
-        console.log(user)
         
     }else{
         window.location.href = "login.html"
@@ -130,5 +131,5 @@ onAuthStateChanged(auth, (user) => {
 removeMenu.onclick = ()=>{
     elementConfigMobile.click()
 }
-console.log(removeMenu.onclick)
+
 

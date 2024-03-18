@@ -197,6 +197,18 @@ nav img{
 }
 
 @media only screen and (max-width: 600px) {
+    .link{
+        display:flex ;
+        align-items: center;
+    }
+    .link.qrcode::before{
+        content: "";
+        width: 30px;
+        height: 30px;
+        background-image: url(./qricon.svg);
+        background-size: contain;
+        margin-right: 10px;
+    }
     .navigator-mobile{
         display: flex; 
         width: 100%;
