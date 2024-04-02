@@ -119,10 +119,6 @@ onAuthStateChanged(auth, (user) => {
                 }
             }
         }
-        if(location.pathname.includes('/qr')){
-            console.log("qr")
-            return
-        }
         console.log(elementConfig)
         elementConfig.onclick = generatePopup
     
@@ -142,13 +138,12 @@ onAuthStateChanged(auth, (user) => {
         window.location.href = "login.html"
     }
 })
-if(!location.pathname.includes('/qr')){
-    removeMenu.onclick = ()=>{
-   
-        elementConfigMobile.click()
-    }
-    return
+
+removeMenu.onclick = ()=>{
+    elementConfigMobile.click()
 }
+
+
 
 
 
