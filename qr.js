@@ -15,7 +15,6 @@ const db = getFirestore(app);
 const beep = new Audio()
 beep.src = "./beep.mp3"
 beep.volume = 0
-beep.play()
 async function obterDocumento(id){
     const produtosColec = "produtos"; // Substitua pelo nome da coleção
     // Crie uma referência ao documento que você deseja atualizar
@@ -49,47 +48,59 @@ let bipCount = 0
 const confirmButtom = document.getElementById("confirmar")
 let objectToPost = []
 let tasksPost = []
-const canvasElement = document.createElement('canvas');
-const canvas = canvasElement.getContext('2d',{ willReadFrequently: true });
 const scanArea = document.getElementById("qrArea")
 let lastCode = "null"
+const canvasElement = document.createElement('canvas');
+let canvas = canvasElement.getContext('2d',{ willReadFrequently: true });
+scanArea.appendChild(canvasElement)
 video.addEventListener('play', function() {
-  const width = video.videoWidth;
-  const height = video.videoHeight;
-  canvasElement.width = width;
-  canvasElement.height = height;
-
-  function tick() {
+    tick();
+    console.log("playing")
+});
+function tick() {
+    const width = video.videoWidth;
+    const height = video.videoHeight;
+    canvasElement.width = width;
+    canvasElement.height = height;
     canvas.drawImage(video, 0, 0, width, height);
     const imageData = canvas.getImageData(0, 0, width, height);
     let code = jsQR(imageData.data, imageData.width, imageData.height);
-    if (code&&lastCode!=code.data) {
-        //scan valido
-        const data = code.data||null
-        const [refPendentes,codeRef,refEstoques,quant,cor] = data.split("*")
-        if(refEstoques&&quant&&data){
-            const foundObject = objectToPost.find(ob => ob.code === codeRef);
-            if(foundObject){
-                //checando se ja existe antes de postar
+
+    function learnCode(){
+        if (code&&lastCode!=code.data) {
+            //scan valido
+            const data = code.data||null
+            if(!data||!data.split){
                 return
             }
-            objectToPost.push({
-                ref:refEstoques,
-                quant:quant,
-                cor:cor,
-                code:codeRef
-            })
-            execAnimation()
+            const [refPendentes,codeRef,refEstoques,quant,cor] = data.split("*")||null
+            if(refEstoques&&quant&&data){
+                const foundObject = objectToPost.find(ob => ob.code === codeRef);
+                if(foundObject){
+                    //checando se ja existe antes de postar
+                    return
+                }
+                objectToPost.push({
+                    ref:refEstoques,
+                    quant:quant,
+                    cor:cor,
+                    code:codeRef
+                })
+                execAnimation()
+                resetCtx()
+            }
+            lastCode=data
+            // console.log('QR Code detected:', code);
         }
-        lastCode=data
-        console.log('QR Code detected:', code);
     }
-    requestAnimationFrame(tick);
-  }
-
-  tick();
-});
-
+    //Usamos learnCode como método separado porque um return externo pararia o loop
+    learnCode()
+    requestAnimationFrame(tick)
+}
+function resetCtx(){
+    canvas = null
+    canvas = canvasElement.getContext('2d',{ willReadFrequently: true });
+}
 function execAnimation(){
     beep.currentTime = 0
     beep.volume = 1

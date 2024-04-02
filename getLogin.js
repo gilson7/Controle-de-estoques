@@ -67,11 +67,16 @@ onAuthStateChanged(auth, (user) => {
             }
         }
         getUserType()
+        
         if(elementConfig){
             elementConfig.style.backgroundImage = `url(${user.photoURL})`
         }
       
         function generatePopup(type){
+            if(location.pathname.includes('/qr')){
+                console.log("qr")
+                return
+            }
             if(ispp){
                 //impedindo multiplos popups
                 return
@@ -113,8 +118,15 @@ onAuthStateChanged(auth, (user) => {
                     ispp = false
                 }
             }
-        }   
+        }
+        if(location.pathname.includes('/qr')){
+            console.log("qr")
+            return
+        }
+        console.log(elementConfig)
         elementConfig.onclick = generatePopup
+    
+
         elementConfigMobile.onclick = ()=>{
             generatePopup("mob")
             if(menu.classList.value.includes("active")){
@@ -124,12 +136,19 @@ onAuthStateChanged(auth, (user) => {
             menu.classList.add("active")
         }
         
+      
+        
     }else{
         window.location.href = "login.html"
     }
 })
-removeMenu.onclick = ()=>{
-    elementConfigMobile.click()
+if(!location.pathname.includes('/qr')){
+    removeMenu.onclick = ()=>{
+   
+        elementConfigMobile.click()
+    }
+    return
 }
+
 
 
