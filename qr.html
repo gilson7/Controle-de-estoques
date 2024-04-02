@@ -103,7 +103,7 @@
         #post button:active{
             transform: scale(.95);
         }
-        canvas{
+        video{
             transition: 0;
             left: 0;
             object-fit: cover;
@@ -114,12 +114,6 @@
             position: fixed;
             border-radius: 0;
             z-index: 0;
-        }
-        video{
-            position: fixed;
-            visibility: hidden;
-            left: 100%;
-            top: -100%;
         }
         #contador{
             position: fixed;
@@ -165,7 +159,9 @@
             fill: var(--cor-escuro);
         }
         #qrArea.active svg path{
+            transition: 200ms;
             fill: var(--cor-positivo);
+            transform: scale(.9);
         }
     
 

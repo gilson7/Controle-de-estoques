@@ -52,7 +52,7 @@ const scanArea = document.getElementById("qrArea")
 let lastCode = "null"
 const canvasElement = document.createElement('canvas');
 let canvas = canvasElement.getContext('2d',{ willReadFrequently: true });
-scanArea.appendChild(canvasElement)
+
 video.addEventListener('play', function() {
     tick();
     console.log("playing")
@@ -90,7 +90,7 @@ function tick() {
             }
             lastCode=data
         }
-        console.log('QR Code detected:', code);
+        // console.log('QR Code detected:', code);
     }
     //Usamos learnCode como método separado porque um return externo pararia o loop
     learnCode()
