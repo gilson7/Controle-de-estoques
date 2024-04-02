@@ -51,6 +51,9 @@ const menu = document.getElementById("menu")
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
+        if (location.pathname=="/qr.html") {
+            return
+        }
         async function getUserType(){
             try{
                 const docSnapshot  = await getDoc(doc(db, "users", user.uid))
@@ -138,11 +141,11 @@ onAuthStateChanged(auth, (user) => {
         window.location.href = "login.html"
     }
 })
-
-removeMenu.onclick = ()=>{
-    elementConfigMobile.click()
+if (location.pathname!="/qr.html") {
+    removeMenu.onclick = ()=>{
+        elementConfigMobile.click()
+    }
 }
-
 
 
 

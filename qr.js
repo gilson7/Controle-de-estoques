@@ -64,16 +64,15 @@ function tick() {
     canvasElement.height = height;
     canvas.drawImage(video, 0, 0, width, height);
     const imageData = canvas.getImageData(0, 0, width, height);
-    let code = jsQR(imageData.data, imageData.width, imageData.height);
-
+    const code = jsQR(imageData.data, imageData.width, imageData.height);
     function learnCode(){
         if (code&&lastCode!=code.data) {
             //scan valido
-            const data = code.data||null
+            const data = code.data
             if(!data||!data.split){
                 return
             }
-            const [refPendentes,codeRef,refEstoques,quant,cor] = data.split("*")||null
+            const [refPendentes,codeRef,refEstoques,quant,cor] = data.split("*")
             if(refEstoques&&quant&&data){
                 const foundObject = objectToPost.find(ob => ob.code === codeRef);
                 if(foundObject){
@@ -90,8 +89,8 @@ function tick() {
                 resetCtx()
             }
             lastCode=data
-            // console.log('QR Code detected:', code);
         }
+        console.log('QR Code detected:', code);
     }
     //Usamos learnCode como método separado porque um return externo pararia o loop
     learnCode()
