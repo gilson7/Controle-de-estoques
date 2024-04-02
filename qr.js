@@ -50,7 +50,7 @@ const confirmButtom = document.getElementById("confirmar")
 let objectToPost = []
 let tasksPost = []
 const canvasElement = document.createElement('canvas');
-const canvas = canvasElement.getContext('2d');
+const canvas = canvasElement.getContext('2d',{ willReadFrequently: true });
 const scanArea = document.getElementById("qrArea")
 let lastCode = "null"
 video.addEventListener('play', function() {
@@ -62,12 +62,12 @@ video.addEventListener('play', function() {
   function tick() {
     canvas.drawImage(video, 0, 0, width, height);
     const imageData = canvas.getImageData(0, 0, width, height);
-    var code = jsQR(imageData.data, imageData.width, imageData.height);
+    let code = jsQR(imageData.data, imageData.width, imageData.height);
     if (code&&lastCode!=code.data) {
         //scan valido
-        const data = code.data
+        const data = code.data||null
         const [refPendentes,codeRef,refEstoques,quant,cor] = data.split("*")
-        if(refEstoques&&quant){
+        if(refEstoques&&quant&&data){
             const foundObject = objectToPost.find(ob => ob.code === codeRef);
             if(foundObject){
                 //checando se ja existe antes de postar
