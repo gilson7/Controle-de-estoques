@@ -124,14 +124,26 @@ function render(){
         posts.innerHTML+=`<div class="itt" id="itemCode${ind}">${item.ref}</div>`
     })
 }
+////////////////////////////////////////////////////////////////////////////////////
 const postButton = document.getElementById("postButton")
-postButton.onclick = ()=>{
+const postButton_entrada = document.getElementById("postButton-entrada")
+
+
+function execPost(orient){
+    //oriente informa se devemos somar o subtrair do estoque de acordo com a escolha do user
     objectToPost.map((obj,ind)=>{
         tasksPost.push(async function(){
                 const doc =  await obterDocumento(obj.ref)
                 const data = doc.data()
                 const variac = data.variacoes.find(vari => vari.cor === obj.cor);
-                variac.estoque-=obj.quant
+                let res = parseFloat(variac.estoque)+parseFloat(obj.quant)
+                if(orient=="add"){
+                    res = parseFloat(variac.estoque)+parseFloat(obj.quant)
+                }
+                if(orient=="remove"){
+                    res = parseFloat(variac.estoque) - parseFloat(obj.quant)
+                }
+                variac.estoque=res
                 if(variac.estoque<0){
                     variac.estoque=0
                 }
@@ -151,6 +163,13 @@ postButton.onclick = ()=>{
         console.error('Pelo menos uma das promessas foi rejeitada:', error);
     });
 }
+postButton.onclick = ()=>{
+    execPost("remove")
+}
+postButton_entrada.onclick=()=>{
+    execPost("add")
+}
+////////////////////////////////////////////////////////////////////////////////////
 const closeBipados = document.getElementById("closeBipados")
 closeBipados.onclick = ()=>{
     document.getElementById("post").style.display="none"
@@ -162,6 +181,7 @@ function load(ori){
         postButton.style.opacity=".9%"
     }else{
         postButton.innerText = "Finalizar"
+        postButton_entrada.style.display = "none"
         postButton.onclick
         postButton.style.pointerEvents="all"
         postButton.style.opacity="100%"

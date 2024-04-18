@@ -22,7 +22,10 @@
         <div id="posts">
 
         </div>
-        <button id="postButton">Registrar Saida</button>
+        <button id="postButton-entrada">Add estoque</button>
+        <button id="postButton">Registrar saida</button>
+      
+        
     </div>
 
     <style>
@@ -72,7 +75,7 @@
             width: calc(100% - 20px);
             margin: auto;
             overflow: auto;
-            height:calc( 100% - 110px);
+            height:calc( 100% - 153px);
         }
         .itt{
             background-color: var(--cor-claro);
@@ -85,7 +88,23 @@
         .itt.true{
             background-color: var(--cor-positivo);
         }
-        #post button{
+        #postButton{
+            transition: 100ms;
+            display: block;
+        
+            font-size: 20px;
+            width: calc(100% - 20px);
+            margin: auto;
+            padding:10px 0 ;
+            font-weight: 400;
+            color: var(--cor-negativo);
+            background-color: var(--cor-claro);
+            box-shadow: 0 20px 10px rgba(var(--cor-escuro-dec),.05);
+            font-weight: 600;
+            z-index: 10;
+            margin-top: 5px;
+        }
+        #postButton-entrada{
             transition: 100ms;
             display: block;
             margin-top: 10px;
@@ -94,8 +113,8 @@
             margin: auto;
             padding:10px 0 ;
             font-weight: 400;
-            color: var(--cor-positivo);
-            background-color: var(--cor-claro);
+            color: var(--cor-claro);
+            background-color: var(--cor-azul);
             box-shadow: 0 20px 10px rgba(var(--cor-escuro-dec),.05);
             font-weight: 600;
             z-index: 10;
