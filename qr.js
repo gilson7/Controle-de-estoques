@@ -79,12 +79,18 @@ function tick() {
                     //checando se ja existe antes de postar
                     return
                 }
-                objectToPost.push({
-                    ref:refEstoques,
-                    quant:quant,
-                    cor:cor,
-                    code:codeRef
-                })
+                const foundObject2 = objectToPost.find(ob => ob.ref === refEstoques);
+                if(foundObject2){
+                    const res = parseFloat(foundObject2.quant) + parseFloat(quant)
+                    foundObject2.quant = res
+                }else{
+                    objectToPost.push({
+                        ref:refEstoques,
+                        quant:quant,
+                        cor:cor,
+                        code:codeRef
+                    })
+                }
                 execAnimation()
                 resetCtx()
             }
@@ -104,7 +110,7 @@ function execAnimation(){
     beep.currentTime = 0
     beep.volume = 1
     beep.play()
-    bipCount = objectToPost.length
+    bipCount +=1
     scanArea.classList.add("active")
     confirmButtom.classList.add("active")
     document.getElementById("contador").innerHTML = bipCount!=1?bipCount+" Bipados":bipCount+" Bipado"
@@ -121,7 +127,7 @@ const posts = document.getElementById("posts")
 function render(){
     posts.innerHTML=""
     objectToPost.map((item,ind)=>{
-        posts.innerHTML+=`<div class="itt" id="itemCode${ind}">${item.ref}</div>`
+        posts.innerHTML+=`<div class="itt" id="itemCode${ind}">${item.quant+"-"+item.ref+"-"+item.cor}</div>`
     })
 }
 ////////////////////////////////////////////////////////////////////////////////////
@@ -136,9 +142,9 @@ function execPost(orient){
                 const doc =  await obterDocumento(obj.ref)
                 const data = doc.data()
                 const variac = data.variacoes.find(vari => vari.cor === obj.cor);
-                let res = parseFloat(variac.estoque)+parseFloat(obj.quant)
+                let res = 0
                 if(orient=="add"){
-                    res = parseFloat(variac.estoque)+parseFloat(obj.quant)
+                    res = parseFloat(variac.estoque) + parseFloat(obj.quant)
                 }
                 if(orient=="remove"){
                     res = parseFloat(variac.estoque) - parseFloat(obj.quant)
