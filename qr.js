@@ -79,7 +79,7 @@ function tick() {
                     //checando se ja existe antes de postar
                     return
                 }
-                const foundObject2 = objectToPost.find(ob => ob.ref === refEstoques);
+                const foundObject2 = objectToPost.find(ob => (ob.ref === refEstoques)&&(ob.cor === cor));
                 if(foundObject2){
                     const res = parseFloat(foundObject2.quant) + parseFloat(quant)
                     foundObject2.quant = res
