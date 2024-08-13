@@ -66,7 +66,8 @@ function randomCode(tamanho){
     return codigo;
 }
 
-function isCategory(id){
+function isCategory(cruId){
+    const id = cruId.toUpperCase()
 const conditions={
     banquetas:(id.includes("BQT")),
     mesas:((id.includes("QD BX")||id.includes("QD AL")||id.includes("RD BX")||id.includes("RD AL"))&&!id.includes("BQT")),
