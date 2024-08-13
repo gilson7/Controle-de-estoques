@@ -93,7 +93,8 @@ const cores = {
   Itaqualy:"#25d928",
   Qualyshop:"#ffaa3b",
   Tekshop:"#f73131",
-  Shopee:"#000000"
+  Shopee:"#000000",
+  Aramaidy:"#3D3C79"
 }
 async function obterProdutos() {
     try {

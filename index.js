@@ -516,7 +516,7 @@ async function obterProdutos() {
             pedidoButton.textContent= "solicitação"
             pedidoButton.className = "pedir"
     
-            const lojas=["Qualyshop","Itaqualy","Tekshop","Shopee"]
+            const lojas=["Qualyshop","Itaqualy","Tekshop","Shopee","Aramaidy"]
             var selectedLojas = lojas[0]
             const values = [1,2,3,4,5,6]
             var selectedValue = values[0]
