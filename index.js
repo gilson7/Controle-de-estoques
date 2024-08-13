@@ -70,7 +70,8 @@ function isCategory(id){
 const conditions={
     banquetas:(id.includes("BQT")),
     mesas:((id.includes("QD BX")||id.includes("QD AL")||id.includes("RD BX")||id.includes("RD AL"))&&!id.includes("BQT")),
-    portoes:(id.includes("68-")||id.includes("78-"))
+    portoes:(id.includes("68-")||id.includes("78-")),
+    exaustores:((id.includes("EX")&&id.includes("220V"))||(id.includes("EX")&&id.includes("127V")))
 }
    if (!category) {
         return true
