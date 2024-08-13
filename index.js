@@ -166,7 +166,7 @@ const skuInput = document.createElement("input");
 skuInput.type = "text";
 skuInput.id = "sku";
 skuInput.oninput = ()=>{
-    db_object.sku = skuInput.value
+    db_object.sku = (skuInput.value).toUpperCase()
 }
 tituloInput.oninput = ()=>{
     db_object.titulo = tituloInput.value
