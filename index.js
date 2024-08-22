@@ -618,10 +618,14 @@ async function obterProdutos() {
                                 loja:selectedLojas
                     }
                     if(pedido.pacotes>1){
+                        pedido.sku = pedido.sku.toUpperCase()
+                        const isExsaustor = (pedido.sku.includes("EX") && (pedido.sku.includes("220V")||pedido.sku.includes("127V")))
+                        console.log(pedido.sku)
                         var sku = pedido.sku
                         const regex = /\d+/; // Expressão regular para encontrar um ou mais dígitos
                         const resultado = sku.match(regex); // Procura o padrão na string
-                        if (resultado !== null) {
+                        if (resultado !== null && (!isExsaustor)) {
+                            //essa logica nao se aplica aos exaustores  
                             console.log(resultado[0]); // Retorna o primeiro número encontrado
                             var firstFoundedNumber = parseInt(resultado[0])
                             if(!firstFoundedNumber){
@@ -633,6 +637,9 @@ async function obterProdutos() {
                                 pedido.sku=sku
                             }
                         }
+                        if(isExsaustor&&pedido.pacotes>1){
+                            pedido.sku = pedido.pacotes+" "+pedido.sku
+                        }
                         if(sku.toUpperCase().includes("MESA")&&sku.toUpperCase().includes("BQT")){
                             sku = inserirNumeroAntesDaPalavra(sku, "MESA", pedido.pacotes)
                             pedido.sku=sku
@@ -640,6 +647,7 @@ async function obterProdutos() {
                     }
                     if (quantidade_pedido.value!=""&&quantidade_pedido.value!=NaN) {
                         pedido.pendente = quantidade_pedido.value
+                        //escrevendo no db
                         setPedidos(pedido,doc.id,popup_pedido)
                     }
                     else{
@@ -917,6 +925,7 @@ function deleteRecados(id,element){
   });
 }
 async function setRecados(dados){
+    //criando recados
     console.log(dados)
     try{
         const id = ("_"+dados.data+"_"+dados.hora).replace(":","_").replace(":","_").replace("/","*").replace("/","*")
