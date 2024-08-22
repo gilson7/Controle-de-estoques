@@ -64,31 +64,65 @@ const relatorio = toHtml("div","relatorio","Imprimir relatório")
 
 rodape.appendChild(relatorio)
 rodape.appendChild(quantidade_pacotes_element)
-const docRelatorio = new jsPDF({
-  orientation: 'portrait', // Escolha 'portrait' ou 'landscape' conforme desejado
-  unit: 'mm',
-  format: [210, 297]
-})
-docRelatorio.setFontSize(24)
-docRelatorio.text(70,13,"Relatório de Pedidos")
-docRelatorio.setFontSize(12)
-docRelatorio.text(5,20,`${new Date()}`)
 
-relatorio.onclick = ()=>{
-    const pdfBlob = docRelatorio.output('blob');
-      // Cria um objeto URL para o Blob do PDF
-    const pdfUrl = URL.createObjectURL(pdfBlob);   
-      // Cria um iframe escondido
-    const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-      // Quando o iframe terminar de carregar o PDF, executa a impressão
-    iframe.onload = function() {
-      iframe.contentWindow.print();
-    };
-      // Define o PDF como a fonte do iframe
-    iframe.src = pdfUrl;
+
+function createRelatorio(loja){
+  const docRelatorio = new jsPDF({
+    orientation: 'portrait', // Escolha 'portrait' ou 'landscape' conforme desejado
+    unit: 'mm',
+    format: [210, 297]
+  })
+  docRelatorio.setFontSize(24)
+  docRelatorio.text(5,13,"Relatório de Pedidos "+loja)
+  docRelatorio.setFontSize(12)
+  docRelatorio.text(5,20,`${new Date()}`)
+  return docRelatorio
 }
+const relatoriosElment = toHtml("div","listRelat","")
+const closeRelatorios = toHtml("button","closeRelat","")
+//armazena os relatorios objetos filhos de createRelatorio
+const relatorios = {}
+//imrimindo relatorios
+closeRelatorios.onclick=()=>{
+  relatoriosElment.remove()
+}
+relatorio.onclick = ()=>{
+    relatoriosElment.innerHTML = ""
+    closeRelatorios.innerHTML='<ion-icon name="close-outline"></ion-icon>'
+    relatoriosElment.appendChild(closeRelatorios)
+    
+    relatoriosElment.appendChild(toHtml("h3","titleRelat","Imprimir relatorios"))
+    const list = toHtml("div","listButton","")
+    for (const loja in relatorios) {
+      if (!relatorios.hasOwnProperty(loja)) {
+        return
+      }
+      const printButtonLoja = toHtml("button","print_loja",loja)
+      printButtonLoja.onclick=()=>{
+        const documentRelatorio = relatorios[loja]
+        console.log(documentRelatorio)
+        const pdfBlob = documentRelatorio.output('blob');
+        // Cria um objeto URL para o Blob do PDF
+        const pdfUrl = URL.createObjectURL(pdfBlob);   
+          // Cria um iframe escondido
+        const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+          // Quando o iframe terminar de carregar o PDF, executa a impressão
+        iframe.onload = function() {
+          iframe.contentWindow.print();
+        };
+          // Define o PDF como a fonte do iframe
+        iframe.src = pdfUrl;
+      }
+      list.appendChild(printButtonLoja)
+    }
+    relatoriosElment.appendChild(list)
+    document.body.appendChild(relatoriosElment)
+}
+
+
+
 const cores = {
   Itaqualy:"#25d928",
   Qualyshop:"#ffaa3b",
@@ -96,6 +130,7 @@ const cores = {
   Shopee:"#000000",
   Aramaidy:"#3d3c79"
 }
+
 async function obterProdutos() {
     try {
       const q = query(produtosColec, orderBy('loja'));
@@ -113,8 +148,13 @@ async function obterProdutos() {
         const estDiv = document.createElement("div");
         estDiv.classList.add("pendente");
         estDiv.id = `div_${(data.sku).toLowerCase()}`
-    
+        let docRelatorio = relatorios[data.loja]
         if(data.status!="finalizado"){
+
+          if(!docRelatorio){
+            docRelatorio = createRelatorio(data.loja)
+            relatorios[data.loja] = docRelatorio
+          }
           docRelatorio.setFontSize(14)
           docRelatorio.text(10,relatTextSpace+=7,docu.id+"____"+data.quantidade)
           sizeRelat ++
